@@ -1,0 +1,29 @@
+/*
+ * Copyright (C) 2022 - All Rights Reserved by
+ * EmbedFire LubanCat
+ */
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+&{/leds} {
+    status = "okay";
+    led_test: led_test{
+        label = "led_test";
+        default-state = "on";
+        //gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_LOW>;
+        gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_HIGH>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&led_test_pin>;
+    };
+};
+
+&{/pinctrl} {
+    led_test {
+        led_test_pin: led_test_pin {
+            rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+};

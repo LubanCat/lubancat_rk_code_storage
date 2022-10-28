@@ -1,0 +1,32 @@
+/*
+ * Copyright (C) 2022 - All Rights Reserved by
+ * EmbedFire LubanCat
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include <dt-bindings/clock/rk3568-cru.h>
+#include <dt-bindings/pwm/pwm.h>
+
+
+&pwm0 {
+    status = "okay";
+    pinctrl-names = "active";
+    pinctrl-0 = <&pwm0m1_pins>;
+};
+
+&{/} {
+    pwm_demo: pwm_demo {
+        status = "okay";
+        compatible = "pwm_demo";
+
+		back {
+			pwm-names = "pwm-demo";
+			pwms = <&pwm0 0 10000 1>;
+            duty_ns = <5000>;
+		};
+    };
+};

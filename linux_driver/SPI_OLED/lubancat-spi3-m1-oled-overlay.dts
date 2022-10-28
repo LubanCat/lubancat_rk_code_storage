@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2022 - All Rights Reserved by
+ * EmbedFire LubanCat
+ */
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include <dt-bindings/clock/rk3568-cru.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&spi3{
+    status = "okay";
+    pinctrl-names = "default", "high_speed";
+    pinctrl-0 = <&spi3m1_cs0 &spi3m1_pins>;
+    pinctrl-1 = <&spi3m1_cs0 &spi3m1_pins_hs>;
+    cs-gpios = <&gpio4 RK_PC6 GPIO_ACTIVE_LOW>;
+
+    spi_oled@0 {
+        compatible = "fire,spi_oled";
+        reg = <0>; //chip select 0:cs0  1:cs1
+        spi-max-frequency = <24000000>; //spi output clock
+        dc_control_pin = <&gpio3 RK_PA7 GPIO_ACTIVE_HIGH>;
+        pinctrl-names = "default";
+        pinctrl-0 = <&spi_oled_pin>;
+    };
+};
+
+&pinctrl {
+    spi_oled {
+        spi_oled_pin: spi_oled_pin {
+            rockchip,pins = <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_none>;
+        };
+    };
+};
