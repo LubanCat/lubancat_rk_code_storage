@@ -8,9 +8,13 @@
 #define DEV_NAME            "led_chrdev"
 #define DEV_CNT                 (1)
 
-#define GPIO0_BASE (0xFDD60000)
-#define GPIO0_DR (GPIO0_BASE + 0x0000)
-#define GPIO0_DDR (GPIO0_BASE + 0x0008)
+#define GPIO0_BASE (0xfdd60000)
+//每组GPIO,有2个寄存器,对应32个引脚，每个寄存器负责16个引脚；
+//一个寄存器32位，其中高16位都是使能位，低16位对应16个引脚，每个引脚占用1比特位
+#define GPIO0_DR_L (GPIO0_BASE + 0x0000)
+#define GPIO0_DR_H (GPIO0_BASE + 0x0004)
+#define GPIO0_DDR_L (GPIO0_BASE + 0x0008)
+#define GPIO0_DDR_H (GPIO0_BASE + 0x000C)
 
 static dev_t devno;
 struct class *led_chrdev_class;
@@ -20,21 +24,17 @@ struct led_chrdev {
 	unsigned int __iomem *va_dr; 	// 数据寄存器，设置输出的电压
 	unsigned int __iomem *va_ddr; 	// 数据方向寄存器，设置输入或者输出
 
-	unsigned int led_pin; // 引脚
+	unsigned int led_pin; // 偏移
 };
 
 static int led_chrdev_open(struct inode *inode, struct file *filp)
-{
+{	
 	unsigned int val = 0;
-	struct led_chrdev *led_cdev =
-	    (struct led_chrdev *)container_of(inode->i_cdev, struct led_chrdev,
-					      dev);
-	filp->private_data =
-	    container_of(inode->i_cdev, struct led_chrdev, dev);
+	struct led_chrdev *led_cdev = (struct led_chrdev *)container_of(inode->i_cdev, struct led_chrdev,dev);
+	filp->private_data = container_of(inode->i_cdev, struct led_chrdev, dev);
 
 	printk("open\n");
-
-	// 设置输出模式
+	//设置输出模式
 	val = ioread32(led_cdev->va_ddr);
 	val |= ((unsigned int)0x1 << (led_cdev->led_pin+16));
 	val |= ((unsigned int)0X1 << (led_cdev->led_pin));
@@ -51,7 +51,6 @@ static int led_chrdev_open(struct inode *inode, struct file *filp)
 
 static int led_chrdev_release(struct inode *inode, struct file *filp)
 {
-	printk("realase \n");
 	return 0;
 }
 
@@ -60,10 +59,12 @@ static ssize_t led_chrdev_write(struct file *filp, const char __user * buf,
 {
 	unsigned long val = 0;
 	char ret = 0;
+
 	struct led_chrdev *led_cdev = (struct led_chrdev *)filp->private_data;
-	
+	printk("write \n");
 	get_user(ret, buf);
 	val = ioread32(led_cdev->va_dr);
+	printk("val = %lx\n", val);
 	if (ret == '0'){
 		val |= ((unsigned int)0x1 << (led_cdev->led_pin+16));
 		val &= ~((unsigned int)0x01 << (led_cdev->led_pin));   /*设置GPIO引脚输出低电平*/
@@ -73,7 +74,7 @@ static ssize_t led_chrdev_write(struct file *filp, const char __user * buf,
 		val |= ((unsigned int)0x01 << (led_cdev->led_pin));    /*设置GPIO引脚输出高电平*/
 	}
 	iowrite32(val, led_cdev->va_dr);
-	
+	printk("val = %lx\n", val);
 	return count;
 }
 
@@ -85,7 +86,7 @@ static struct file_operations led_chrdev_fops = {
 };
 
 static struct led_chrdev led_cdev[DEV_CNT] = {
-	{.led_pin = 6}, 	// 定义GPIO引脚号
+	{.led_pin = 7}, 	//偏移，高16引脚,GPIO0_C7
 };
 
 static __init int led_chrdev_init(void)
@@ -93,10 +94,10 @@ static __init int led_chrdev_init(void)
 	int i = 0;
 	dev_t cur_dev;
 
-	printk("led chrdev init \n");
+	printk("led_chrdev init (lubancat2  GPIO0_C7)\n");
 	
-	led_cdev[0].va_dr   = ioremap(GPIO0_DR, 4);	 //
-	led_cdev[0].va_ddr  = ioremap(GPIO0_DDR, 4);	 // 
+	led_cdev[0].va_dr   = ioremap(GPIO0_DR_H, 4);	 //
+	led_cdev[0].va_ddr  = ioremap(GPIO0_DDR_H, 4);	 // 
 
 	alloc_chrdev_region(&devno, 0, DEV_CNT, DEV_NAME);
 
@@ -123,7 +124,7 @@ static __exit void led_chrdev_exit(void)
 {
 	int i;
 	dev_t cur_dev;
-	printk("led chrdev exit\n");
+	printk("led chrdev exit (lubancat2  GPIO0_C7)\n");
 	
 	for (i = 0; i < DEV_CNT; i++) {
 		iounmap(led_cdev[i].va_dr); 		// 释放模式寄存器虚拟地址

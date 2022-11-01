@@ -7,8 +7,8 @@
 //#define GPIO4_DDR (GPIO4_BASE + 0x0008)
 
 #define GPIO0_BASE (0xfdd60000)
-#define GPIO0_DR (GPIO0_BASE + 0x0000)
-#define GPIO0_DDR (GPIO0_BASE + 0x0008)
+#define GPIO0_DR (GPIO0_BASE + 0x0004)
+#define GPIO0_DDR (GPIO0_BASE + 0x000C)
 
 
 static struct resource led_resource[] = {
@@ -18,9 +18,10 @@ static struct resource led_resource[] = {
 
 static void led_release(struct device *dev)
 {
+	
 }
 /* led hardware information */
-unsigned int led_hwinfo[1] = { 6 };
+unsigned int led_hwinfo[1] = { 7 };  //偏移
 
 /*  led device */ 
 static struct platform_device led_pdev = {
@@ -29,8 +30,8 @@ static struct platform_device led_pdev = {
 	.num_resources = ARRAY_SIZE(led_resource),
 	.resource = led_resource,
 	.dev = {
-		.release = led_release,
-		.platform_data = led_hwinfo,
+			.release = led_release,
+			.platform_data = led_hwinfo,
 		},
 };
 
