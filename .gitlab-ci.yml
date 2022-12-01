@@ -1,0 +1,42 @@
+variables:
+  #打包格式，支持zip和tar两种输出格式
+  FORMAT: zip
+  #打包所用的分支或者标签：origin/master表示打包主分支，
+  Branch_or_Tag: origin/master
+  #生成zip的名称
+  ZIP_NAME: lubancat_rk_code_storage_
+  #NAS地址 数量不匹配需要删改PDF-files任务中的内容
+  NAS_URL1: /mnt/百度云对外发布资料/Linux产品线/鲁班猫/1-野火开源图书_教程文档/配套代码
+  #NAS_URL2: 
+
+
+
+
+
+stages: # 分段
+  - pack
+
+code-pack:
+  tags:
+    - ENABLE
+  stage: pack
+  when: manual
+  script:
+    - now="`date +%Y%m%d`"
+    # 打包
+    - git archive --format=$FORMAT --output $ZIP_NAME$now.$FORMAT $Branch_or_Tag
+
+    #网盘同步，在不同的仓库中都需要修改
+    #注意：只在NAS_URL1中使用 -print > ；后面的地址使用  -print >>
+    #
+    #NAS_URL1
+    # 获取要延时删除的zip包列表
+    - find "$NAS_URL1" -path "$NAS_URL1/$ZIP_NAME$now.$FORMAT" -prune -o -type f -name "*.$FORMAT" -print > /root/autodelate/temp/$ZIP_NAME$now.log
+    # 复制新的压缩包
+    - cp -f $ZIP_NAME$now.$FORMAT "$NAS_URL1"
+    #NAS_URL2
+    #- find "$NAS_URL2" -path "$NAS_URL2/$ZIP_NAME$now.$FORMAT" -prune -o -type f -name "*.$FORMAT" -print >> /root/autodelate/temp/$ZIP_NAME$now.log
+    #- cp -f $ZIP_NAME$now.$FORMAT "$NAS_URL2"
+
+
+
