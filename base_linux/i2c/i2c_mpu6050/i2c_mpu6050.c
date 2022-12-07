@@ -44,13 +44,13 @@ int main(int argc,char *argv[] )
 
     if(argc < 2){
         printf("Wrong use !!!!\n");
-            printf("Usage: %s [dev]\n",argv[0]);
-            return -1;
-        }
+        printf("Usage: %s [dev]\n",argv[0]);
+        return -1;
+    }
 
     fd = open(argv[1], O_RDWR); // open file and enable read and  write
     if (fd < 0){
-        perror("Can't open %s \n",argv[1]); // open i2c dev file fail
+        printf("Can't open %s \n",argv[1]); // open i2c dev file fail
         exit(1);
     }
 

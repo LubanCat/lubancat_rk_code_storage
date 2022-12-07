@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     }
 
     /*获取GPIO引脚*/
-    line = gpiod_chip_get_line(chip, 8);
+    line = gpiod_chip_get_line(chip, 4);
     if(line == NULL){
         printf("gpiod_chip_get_line error\n");
         goto release_line;

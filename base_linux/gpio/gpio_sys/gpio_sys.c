@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
     /* 校验传参 */
     if (2 != argc) {
-        printf( "usage: %s <id> <PinNum>\n",argv[0]);
+        printf( "usage: %s <PinNum>\n",argv[0]);
         return -1;
     }
     res = gpio_init(argv[1]);
