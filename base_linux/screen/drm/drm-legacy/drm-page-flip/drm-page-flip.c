@@ -141,11 +141,12 @@ static void drm_page_flip_handler(int fd, uint32_t frame,
 {
 	static int i = 0;
 	uint32_t crtc_id = *(uint32_t *)data;
-
+	printf("23\n");
 	if(i==0)
 		i=1;
 	else if(i==1)
 		i=0;
+	printf("22\n");
 	drmModePageFlip(fd, crtc_id, buf[i].fb_id,
 			DRM_MODE_PAGE_FLIP_EVENT, data);
 }
@@ -158,19 +159,21 @@ int main(int argc, char **argv)
 	ev.page_flip_handler = drm_page_flip_handler;
 
 	drm_init();
-	size0 = buf[0].width*buf[0].height;
-	size1 = buf[1].width*buf[1].height;
+
+	printf("1\n");
 	//buffer上层布满红色
-	for(i=0;i<size0;i++)
+	for(i=0;i<buf[0].width*buf[0].height;i++)
 		buf[0].vaddr[i] = RED;
 	//buffer下层布满蓝色
-	for(i=0;i<size1;i++)
+	for(i=0;i<buf[1].width*buf[1].height;i++)
 		buf[1].vaddr[i] = BLUE;
-	
+	printf("2\n");
 	drmModePageFlip(fd, crtc_id, buf[0].fb_id,
 			DRM_MODE_PAGE_FLIP_EVENT, &crtc_id);
+	printf("3\n");
 	//输入字符
 	getchar();
+	printf("4\n");
 	//切换buffer下层
 	drmHandleEvent(fd, &ev);
 	//输入字符
