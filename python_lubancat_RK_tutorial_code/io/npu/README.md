@@ -1,4 +1,4 @@
-## npu目录结构
+## 目录结构
 
 ```
 ./
@@ -29,9 +29,9 @@
 
 ## 说明
 
-使用LubancatRK系列板卡（RK3566，RK3568），板卡环境是基于Python 3.7.3版本(镜像系统是Debian10)进行实验及讲解，PC环境使用ubuntu20.04（python3.8.10）。
+使用LubancatRK系列板卡（RK3566，RK3568），板卡环境是基于Python 3.7.3版本(镜像系统是Debian10)进行实验及讲解，PC环境使用ubuntu20.04（python3.8.10）,教程编写时的RKNN-Toolkit2是1.4.0版本。
 
-配套教程https://doc.embedfire.com/linux/rk356x/Python/zh/latest/circuit/rknn.html，教程编写时的RKNN-Toolkit2是1.4.0版本。
+配套教程https://doc.embedfire.com/linux/rk356x/Python/zh/latest/circuit/rknn.html 
 
 rknn_toolkit_lite2源文件也可以直接从官方github获取，https://github.com/rockchip-linux/rknn-toolkit2/tree/master/rknn_toolkit_lite2
 
