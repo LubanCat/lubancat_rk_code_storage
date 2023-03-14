@@ -1,0 +1,10 @@
+mean:
+std:
+model_path: ./picodet_s_416_coco_lcnet/picodet_s_416_coco_lcnet.onnx
+target_platform: RK3568
+outputs_nodes:
+  - 'p2o.Div.79'
+  - 'p2o.Concat.9'
+do_quantization: False
+dataset:
+output_folder: "./picodet_s_416_coco_lcnet"

@@ -5,14 +5,14 @@
 int main(int argc, char *argv[])
 {
     printf("led test_app\n");
+    
     /*判断输入的命令是否合法*/
     if(argc != 2)
     {
         printf(" command error ! \n");
-	printf(" usage : sudo test_app num [num can be "0" or "1"]\n");
+	    printf(" usage : sudo test_app num [num can be 0 or 1]\n");
         return -1;
     }
-
 
     /*打开文件*/
     int fd = open("/dev/led_test", O_RDWR);
@@ -22,8 +22,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-    unsigned char commend = atoi(argv[1]);  //将受到的命令值转化为数字;
-
+    unsigned char commend = atoi(argv[1]);  //将接收值转化为数字;
 
     /*写入命令*/
     int error = write(fd,&commend,sizeof(commend));

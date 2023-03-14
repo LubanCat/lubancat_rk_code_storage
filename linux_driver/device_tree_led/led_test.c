@@ -3,7 +3,6 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
-
 #include <linux/types.h>
 #include <linux/kernel.h>
 #include <linux/delay.h>
@@ -15,7 +14,6 @@
 #include <linux/of_gpio.h>
 #include <asm/io.h>
 #include <linux/device.h>
-
 #include <linux/platform_device.h>
 
 /*------------------字符设备内容----------------------*/
@@ -61,15 +59,15 @@ static ssize_t led_chr_dev_write(struct file *filp, const char __user *buf, size
 	/*设置led引脚 输出电平*/
 	if (write_data)
 	{
-		register_data |= ((unsigned int)0x1 << (6));
-                register_data |= ((unsigned int)0x1 << (22));
-		writel(register_data, led_res.va_DR); // GPIOA13引脚输出高电平，红灯灭
+		register_data |= ((unsigned int)0x1 << (23));
+		register_data |= ((unsigned int)0x1 << (7));
+		writel(register_data, led_res.va_DR); // GPIO0_C7引脚输出高电平，红灯灭
 	}
 	else
 	{
-		register_data &= ~((unsigned int)0x1 << (6));
-        	register_data |= ((unsigned int)0x1 << (22));
-		writel(register_data, led_res.va_DR); // GPIOA13引脚输出低电平，红灯亮
+		register_data |= ((unsigned int)0x1 << (23));
+		register_data &= ~((unsigned int)0x1 << (7));
+		writel(register_data, led_res.va_DR); // GPIO0_C7引脚输出低电平，红灯亮
 	}
 
 	return 0;
@@ -109,7 +107,6 @@ static int led_probe(struct platform_device *pdv)
 		return -1;
 	}
 
-
 	/*获取 reg 属性并转化为虚拟地址*/
 	led_res.va_DR = of_iomap(led_res.device_node, 0);
 	if(led_res.va_DR == NULL){
@@ -125,14 +122,14 @@ static int led_probe(struct platform_device *pdv)
 
 	// 设置模式寄存器：输出模式
 	register_data = readl(led_res.va_DDR);
-	register_data |= ((unsigned int)0X1 << (6));
-	register_data |= ((unsigned int)0X1 << (22));
+	register_data |= ((unsigned int)0x1 << (23));
+	register_data |= ((unsigned int)0x1 << (7));
 	writel(register_data,led_res.va_DDR);
 
 	// 设置置位寄存器：默认输出高电平
 	register_data = readl(led_res.va_DR);
-	register_data |= ((unsigned int)0x1 << (6));
-	register_data |= ((unsigned int)0x1 << (22));
+	register_data |= ((unsigned int)0x1 << (23));
+	register_data |= ((unsigned int)0x1 << (7));
 	writel(register_data, led_res.va_DR);
 
 	/*---------------------注册 字符设备部分-----------------*/
@@ -150,6 +147,7 @@ static int led_probe(struct platform_device *pdv)
 	//关联字符设备结构体cdev与文件操作结构体file_operations
 	led_chr_dev.owner = THIS_MODULE;
 	cdev_init(&led_chr_dev, &led_chr_dev_fops);
+
 	//第三步
 	//添加设备至cdev_map散列表中
 	ret = cdev_add(&led_chr_dev, led_devno, DEV_CNT);

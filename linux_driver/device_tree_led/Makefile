@@ -1,4 +1,5 @@
-KERNEL_DIR=../../kernel/build
+# 指定内核目录,根据实际编译内核时指定的输出目录，编译时没有指定，就是内核源码目录
+KERNEL_DIR=../../../kernel
 
 ARCH=arm64
 CROSS_COMPILE=aarch64-linux-gnu-
