@@ -19,19 +19,15 @@
 │       ├── rknn_toolkit_lite2-1.4.0-cp37-cp37m-linux_aarch64.whl
 │       ├── rknn_toolkit_lite2-1.4.0-cp39-cp39-linux_aarch64.whl
 │       └── rknn_toolkit_lite2_1.4.0_packages.md5sum
-├── yolov5_evaluate
-│   ├── adb      # adb工具 1.0.40版本
-│   ├── bus.jpg
-│   ├── dataset.txt
-│   ├── test.py
-│   └── yolov5s.rknn
-└── yolov5_export
+└── yolov5_evaluate
+    ├── adb       # adb工具 1.0.40版本
     ├── bus.jpg
     ├── dataset.txt
     ├── test.py
+    ├── yolov5s.onnx
     └── yolov5s.rknn
 
-7 directories, 21 files
+6 directories, 18 files
 
 ```
 
@@ -40,7 +36,6 @@
 | 目录               | 说明                             |
 | ------------------ | -------------------------------- |
 | rknn_toolkit_lite2 | 在板端上推理                     |
-| yolov5_export      | 在PC端进行模型转换和推理         |
 | yolov5_evaluate    | 在PC端进行连板调试，模型性能评估 |
 
 
