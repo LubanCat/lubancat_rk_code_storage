@@ -6,7 +6,7 @@ static int itype=0;
 module_param(itype,int,0);
 
 static bool btype=0;
-module_param(btype,bool,0700);
+module_param(btype,bool,0644);
 
 static char ctype=0;
 module_param(ctype,byte,0);
