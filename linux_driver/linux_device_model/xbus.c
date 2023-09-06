@@ -3,6 +3,11 @@
 
 #include <linux/device.h>
 
+#define BUS_ATTR(_name, _mode, _show, _store)       \
+           struct bus_attribute bus_attr_##_name = __ATTR(_name, _mode, _show, _store)  
+		   /* 5.10.160内核已经更换该定义，参见内核源码/include/linux/device/bus.h，
+		   此处自行定义，解决使用高版本内核源码编译驱动模块时报错 */
+
 /************************************************************************
 	* 函数负责总线下的设备以及驱动匹配
 	* 使用字符串比较的方式，通过对比驱动以及设备的名字来确定是否匹配，
