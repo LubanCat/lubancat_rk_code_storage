@@ -1,4 +1,4 @@
-KERNEL_DIR=../../../kernel/
+KERNEL_DIR=../../kernel/
 
 ARCH=arm64
 CROSS_COMPILE=aarch64-linux-gnu-
