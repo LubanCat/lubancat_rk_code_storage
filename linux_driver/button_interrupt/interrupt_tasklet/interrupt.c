@@ -218,7 +218,7 @@ module_init(button_driver_init);
 module_exit(button_driver_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("embedfire lubuncat2_RK , interrupt tasklet);
+MODULE_DESCRIPTION("embedfire lubuncat , interrupt tasklet");
 
 
 

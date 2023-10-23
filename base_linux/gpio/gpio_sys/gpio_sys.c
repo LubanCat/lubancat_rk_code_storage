@@ -58,7 +58,7 @@ int gpio_high(char *name)
         return -1;
     }
         
-    if(2 != write(fd, "0", sizeof("0")))
+    if(2 != write(fd, "1", sizeof("1")))
         printf("wrong set \n");
     close(fd);
     return 0;
@@ -75,7 +75,7 @@ int gpio_low(char *name)
         return -1;
     }
         
-    if(2 != write(fd, "1", sizeof("1")))
+    if(2 != write(fd, "0", sizeof("0")))
         printf("wrong set \n");
     close(fd);
     return 0;

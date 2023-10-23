@@ -12,15 +12,15 @@
         pinctrl-names = "default";
         pinctrl-0 = <&button_interrupt_pin>;
         interrupt-parent = <&gpio0>;
-        interrupts = <RK_PC7 IRQ_TYPE_LEVEL_LOW>;
-        button-gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_HIGH>;
+        interrupts = <RK_PB0 IRQ_TYPE_LEVEL_LOW>;
+        button-gpios = <&gpio0 RK_PB0 GPIO_ACTIVE_HIGH>;
     };
 };
 
 &{/pinctrl} {
     button_interrupt {
         button_interrupt_pin: button_interrupt_pin {
-            rockchip,pins = <0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
+            rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
         };
     };
 };

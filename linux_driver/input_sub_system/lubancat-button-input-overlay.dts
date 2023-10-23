@@ -9,18 +9,18 @@
         input_button: input_button {
             status = "okay";
             compatible = "input_button";
-            button-gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_HIGH>;  //引脚可以根据具体板卡修改，这里以lubancat2为例
+            button-gpios = <&gpio0 RK_PB0 GPIO_ACTIVE_HIGH>;  //引脚可以根据具体板卡修改，这里以GPIO0_B0
             pinctrl-names = "default";
             pinctrl-0 = <&input_button_pin>;
             interrupt-parent = <&gpio0>;                    
-            interrupts = <RK_PC7 IRQ_TYPE_EDGE_BOTH>;     
+            interrupts = <RK_PB0 IRQ_TYPE_EDGE_BOTH>;     
         };
     };
 
 &{/pinctrl} {
     pinctrl_button {
         input_button_pin: input_button_pin {
-            rockchip,pins = <0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>;
+            rockchip,pins = <0 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
         };
     };
 };
