@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>577</width>
+    <height>466</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog Test</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="0" rowspan="2">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>QFileDialog</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
+        <widget class="QPushButton" name="btn_openFile">
+         <property name="text">
+          <string>打开文件</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="btn_openDir">
+         <property name="text">
+          <string>打开文件夹</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="btn_openFiles">
+         <property name="text">
+          <string>打开多个文件</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="btn_save">
+         <property name="text">
+          <string>保存文件 </string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="title">
+       <string>QMessageBox</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="2" column="1">
+        <widget class="QPushButton" name="btn_question">
+         <property name="text">
+          <string>question</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="btn_about">
+         <property name="text">
+          <string>about</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="btn_critical">
+         <property name="text">
+          <string>critical</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="btn_warning">
+         <property name="text">
+          <string>warning</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_information">
+         <property name="text">
+          <string>information</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="btn_aboutQt">
+         <property name="text">
+          <string>aboutQt</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="2" rowspan="2">
+     <widget class="QGroupBox" name="groupBox_6">
+      <property name="title">
+       <string>QInputDialog</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_6">
+       <item row="3" column="1">
+        <widget class="QPushButton" name="btn_getItem">
+         <property name="text">
+          <string>getItem</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_getDouble">
+         <property name="text">
+          <string>getDouble</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="btn_getMultiLineText">
+         <property name="text">
+          <string>getMultiLineText</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="btn_getInt">
+         <property name="text">
+          <string>getInt</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="btn_getText">
+         <property name="text">
+          <string>getText</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QGroupBox" name="groupBox_9">
+      <property name="title">
+       <string>custom</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_10">
+       <item row="2" column="1">
+        <widget class="QPushButton" name="btn_logo">
+         <property name="text">
+          <string>自定义对话框</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QGroupBox" name="groupBox_10">
+      <property name="title">
+       <string>QPrintDialog</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_11">
+       <item row="3" column="1">
+        <widget class="QPushButton" name="btn_print">
+         <property name="text">
+          <string>打印机</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>QFontDialog</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_font">
+         <property name="text">
+          <string>选择字体</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QGroupBox" name="groupBox_3">
+      <property name="title">
+       <string>QColorDialog</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_color">
+         <property name="text">
+          <string>选择颜色</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QGroupBox" name="groupBox_7">
+      <property name="title">
+       <string>QErrorMessage</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="1" column="1">
+        <widget class="QPushButton" name="btn_error">
+         <property name="text">
+          <string>错误消息</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="3">
+     <widget class="QGroupBox" name="groupBox_8">
+      <property name="title">
+       <string>QProgressDialog</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="2" column="1">
+        <widget class="QPushButton" name="btn_progress">
+         <property name="text">
+          <string>进度条</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="4">
+     <widget class="QTextEdit" name="textEdit"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>577</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

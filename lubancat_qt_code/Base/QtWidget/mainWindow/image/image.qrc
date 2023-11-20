@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>about.png</file>
+        <file>clear.png</file>
+        <file>copy.png</file>
+        <file>cut.png</file>
+        <file>file-close.png</file>
+        <file>file-open.png</file>
+        <file>image.qrc</file>
+        <file>new.png</file>
+        <file>notepad.png</file>
+        <file>Redo.png</file>
+        <file>save.png</file>
+        <file>select-all.png</file>
+        <file>Undo.png</file>
+        <file>exit.png</file>
+        <file>paste.png</file>
+    </qresource>
+</RCC>

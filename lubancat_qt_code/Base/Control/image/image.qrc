@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ic_btn.png</file>
+        <file>ic_btn_pre.png</file>
+        <file>menu_icon.png</file>
+        <file>menu_icon_pressed.png</file>
+        <file>take.png</file>
+        <file>take_pressed.png</file>
+        <file>ic_setting.png</file>
+        <file>ic_setting_pressed.png</file>
+    </qresource>
+</RCC>

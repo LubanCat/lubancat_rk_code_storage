@@ -1,0 +1,1034 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>679</width>
+    <height>575</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>窗口</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_5">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="currentIndex">
+       <number>5</number>
+      </property>
+      <widget class="QWidget" name="page_stackedWidget">
+       <layout class="QGridLayout" name="gridLayout_27">
+        <item row="0" column="0">
+         <widget class="QStackedWidget" name="stackedWidget_demo">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="page_demo_1">
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>page1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_demo_2">
+           <layout class="QGridLayout" name="gridLayout_24">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>page2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_tabWidget">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="tabPosition">
+           <enum>QTabWidget::North</enum>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
+          </property>
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <property name="elideMode">
+           <enum>Qt::ElideNone</enum>
+          </property>
+          <widget class="QWidget" name="tab_1">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_21">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Tab 1</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_22">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>Tab 2</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_widget">
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>widget</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QFrame" name="frame">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_26">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_6">
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>frame</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QGroupBox" name="groupBox_demo">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>GroupBox</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_25">
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="radioButton_2">
+             <property name="text">
+              <string>RadioButton</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="radioButton">
+             <property name="text">
+              <string>RadioButton</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="checkBox_2">
+             <property name="text">
+              <string>CheckBox</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="checkBox">
+             <property name="text">
+              <string>CheckBox</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_scrollArea">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="widget_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>198</width>
+             <height>98</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_17">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string/>
+              </property>
+              <property name="pixmap">
+               <pixmap>:/images/car/ic_background.png</pixmap>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_mdiArea">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QMdiArea" name="mdiArea">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>100</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_listWidget">
+       <layout class="QGridLayout" name="gridLayout_10">
+        <item row="0" column="0">
+         <widget class="QListWidget" name="listWidget"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_treeWidget">
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="0">
+         <widget class="QTreeWidget" name="treeWidget">
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_tableWidget">
+       <layout class="QGridLayout" name="gridLayout_9">
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tableWidget"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>679</width>
+     <height>27</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_page">
+    <property name="title">
+     <string>窗口</string>
+    </property>
+    <addaction name="actionQWidget"/>
+    <addaction name="actionQScrollArea"/>
+    <addaction name="separator"/>
+    <addaction name="actionQStackedWidget"/>
+    <addaction name="actionQTabWidget"/>
+    <addaction name="separator"/>
+    <addaction name="actionQListWidget"/>
+    <addaction name="actionQTreeWidget"/>
+    <addaction name="actionQTableWidget"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>其他窗口</string>
+    </property>
+    <addaction name="actionQDockWidget"/>
+    <addaction name="actionQMdiArea"/>
+    <addaction name="actionOpenGWidget"/>
+    <addaction name="actionQuickWidget"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>关于</string>
+    </property>
+    <addaction name="actionAboutQt"/>
+   </widget>
+   <addaction name="menu_page"/>
+   <addaction name="menu"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>237</width>
+     <height>526</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>可停靠窗口</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout_15">
+     <item row="0" column="0" rowspan="2">
+      <widget class="QStackedWidget" name="stackedWidget_menu">
+       <property name="currentIndex">
+        <number>7</number>
+       </property>
+       <widget class="QWidget" name="page_stackedWidget_menu">
+        <layout class="QGridLayout" name="gridLayout_16">
+         <item row="1" column="0">
+          <widget class="QPushButton" name="btn_stackedWidget_insert">
+           <property name="text">
+            <string>插入页</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>159</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="btn_stackedWidget_toggle">
+           <property name="text">
+            <string>切换页</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="btn_stackedWidget_delete">
+           <property name="text">
+            <string>删除页</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_tabWidget_menu">
+        <layout class="QGridLayout" name="gridLayout_18">
+         <item row="1" column="0">
+          <widget class="QPushButton" name="btn_tabWidget_insert">
+           <property name="text">
+            <string>插入页</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>36</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="btn_tabWidget_delete">
+           <property name="text">
+            <string>删除页</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="btn_tabWidget_toggle">
+           <property name="text">
+            <string>切换页</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QComboBox" name="cbox_tabWidget"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_widget_menu">
+        <layout class="QGridLayout" name="gridLayout_14">
+         <item row="0" column="0">
+          <widget class="QToolBox" name="toolBox">
+           <property name="currentIndex">
+            <number>1</number>
+           </property>
+           <widget class="QWidget" name="page">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>100</width>
+              <height>30</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>QWidget</string>
+            </attribute>
+           </widget>
+           <widget class="QWidget" name="page_2">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>201</width>
+              <height>378</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>QFrame</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_29">
+             <item row="1" column="0">
+              <widget class="QComboBox" name="cbox_frame_Shape"/>
+             </item>
+             <item row="8" column="0">
+              <spacer name="verticalSpacer_8">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>139</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>lineWidth</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QSpinBox" name="spinBox_midLineWidth"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QComboBox" name="cbox_frame_Shadow"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>Shape</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QSpinBox" name="spinBox_lineWidth"/>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>midLineWidth</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>Shadow</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="page_3">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>111</width>
+              <height>107</height>
+             </rect>
+            </property>
+            <attribute name="label">
+             <string>GroupBox</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_30">
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkBox_demo">
+               <property name="text">
+                <string>checkable</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QComboBox" name="cbox_demo_alignment"/>
+             </item>
+             <item row="3" column="0">
+              <spacer name="verticalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>268</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="checkBox_demo_flat">
+               <property name="text">
+                <string>flat</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_scrollArea_menu">
+        <layout class="QGridLayout" name="gridLayout_19"/>
+       </widget>
+       <widget class="QWidget" name="page_mdiArea_menu">
+        <layout class="QGridLayout" name="gridLayout_20">
+         <item row="1" column="0">
+          <widget class="QPushButton" name="btn_mdiArea_close">
+           <property name="text">
+            <string>删除当前窗口</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <spacer name="verticalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="0">
+          <widget class="QComboBox" name="cbox_mdiArea_model"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="btn_mdiArea_closeAll">
+           <property name="text">
+            <string>关闭所有</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QComboBox" name="cbox_mdiArea_layout"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="btn_mdiArea_add">
+           <property name="text">
+            <string>新建子窗口</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_listWidget_menu">
+        <layout class="QGridLayout" name="gridLayout_23">
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="cbox_edit">
+           <property name="text">
+            <string>可编辑</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="btn_listWidget_delete">
+           <property name="text">
+            <string>删除列</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="btn_listWidget_add">
+           <property name="text">
+            <string>添加列</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QComboBox" name="cbox_listWidget_style"/>
+         </item>
+         <item row="7" column="0">
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>36</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="btn_listWidget_insert">
+           <property name="text">
+            <string>插入列</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="btn_listWidget_clear">
+           <property name="text">
+            <string>清空列</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_treeWidget_menu">
+        <layout class="QGridLayout" name="gridLayout_28">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="btn_treeWidget_path">
+           <property name="text">
+            <string>选择目录</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>202</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="btn_treeWidget_delete">
+           <property name="text">
+            <string>删除当前项</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="page_tableWidget_menu">
+        <layout class="QGridLayout" name="gridLayout_13">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox_2">
+           <property name="title">
+            <string>table操作</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <item row="3" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_cleartable">
+                <property name="text">
+                 <string>清除数据</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_cleardate">
+                <property name="text">
+                 <string>清除表格</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_init">
+                <property name="text">
+                 <string>初始化表格</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_row">
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="value">
+                 <number>2</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinBox_col">
+                <property name="maximumSize">
+                 <size>
+                  <width>40</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="value">
+                 <number>2</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_delrow">
+                <property name="text">
+                 <string>删除行</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_delcol">
+                <property name="text">
+                 <string>删除列</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="1" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_addrow">
+                <property name="text">
+                 <string>添加行</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_tableWidget_addcol">
+                <property name="text">
+                 <string>添加列</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="5" column="0">
+             <widget class="QPushButton" name="btn_tableWidget_adjust">
+              <property name="text">
+               <string>调整行列间距</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QPushButton" name="btn_tableWidget_insertitem">
+              <property name="text">
+               <string>插入item</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGroupBox" name="groupBox_3">
+           <property name="title">
+            <string>item属性</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <item row="4" column="0">
+             <widget class="QComboBox" name="cbox_tableWidget_SelectionMode"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="cbox_tableWidget_EditTrigger"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QComboBox" name="cbox_tableWidget_SelectionBehavior"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="cbox_table_title">
+              <property name="text">
+               <string>表头</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>129</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="lab_x">
+             <property name="text">
+              <string>X:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lab_pos_x">
+             <property name="text">
+              <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lab_y">
+             <property name="text">
+              <string>Y:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lab_pos_y">
+             <property name="text">
+              <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lab_content">
+             <property name="text">
+              <string>content</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionQWidget">
+   <property name="text">
+    <string>QWidget</string>
+   </property>
+  </action>
+  <action name="actionQScrollArea">
+   <property name="text">
+    <string>QScrollArea</string>
+   </property>
+  </action>
+  <action name="actionQStackedWidget">
+   <property name="text">
+    <string>QStackedWidget</string>
+   </property>
+  </action>
+  <action name="actionQListWidget">
+   <property name="text">
+    <string>QListWidget</string>
+   </property>
+  </action>
+  <action name="actionQTabWidget">
+   <property name="text">
+    <string>QTabWidget</string>
+   </property>
+  </action>
+  <action name="actionQDockWidget">
+   <property name="text">
+    <string>QDockWidget</string>
+   </property>
+   <property name="toolTip">
+    <string>隐藏/显示QDockWidget</string>
+   </property>
+  </action>
+  <action name="actionQTreeWidget">
+   <property name="text">
+    <string>QTreeWidget</string>
+   </property>
+  </action>
+  <action name="actionQTableWidget">
+   <property name="text">
+    <string>QTableWidget</string>
+   </property>
+  </action>
+  <action name="actionQMdiArea">
+   <property name="text">
+    <string>QMdiArea</string>
+   </property>
+  </action>
+  <action name="actionOpenGWidget">
+   <property name="text">
+    <string>OpenGWidget</string>
+   </property>
+  </action>
+  <action name="actionQuickWidget">
+   <property name="text">
+    <string>QuickWidget</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
