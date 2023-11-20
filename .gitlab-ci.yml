@@ -9,10 +9,6 @@ variables:
   NAS_URL1: /mnt/百度云对外发布资料/Linux产品线/鲁班猫/1-野火开源图书_教程文档/配套代码
   #NAS_URL2: 
 
-
-
-
-
 stages: # 分段
   - pack
 
@@ -20,11 +16,14 @@ code-pack:
   tags:
     - ENABLE
   stage: pack
-  when: manual
+  # when: manual
   script:
     - now="`date +%Y%m%d`"
+    - apt update && apt install -y python3 python3-pip
+    - pip3 install git-archive-all -i https://pypi.tuna.tsinghua.edu.cn/simple
     # 打包
-    - git archive --format=$FORMAT --output $ZIP_NAME$now.$FORMAT $Branch_or_Tag
+    - git submodule update --init --recursive
+    - git-archive-all --prefix=lubancat_rk_code_storage --force-submodules $ZIP_NAME$now.$FORMAT 
 
     #网盘同步，在不同的仓库中都需要修改
     #注意：只在NAS_URL1中使用 -print > ；后面的地址使用  -print >>
