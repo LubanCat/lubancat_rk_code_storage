@@ -23,6 +23,7 @@ code-pack:
     - pip3 install git-archive-all -i https://pypi.tuna.tsinghua.edu.cn/simple
     # 打包
     - git submodule update --init --recursive
+    - git submodule foreach 'git pull origin master'
     - git-archive-all --prefix=lubancat_rk_code_storage --force-submodules $ZIP_NAME$now.$FORMAT 
 
     #网盘同步，在不同的仓库中都需要修改
