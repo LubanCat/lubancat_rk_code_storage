@@ -136,7 +136,9 @@ int main(int argc, char **argv)
 	getchar();
 	//切换buffer下层
 	drmModeSetCrtc(fd, crtc_id, buf.fb_id,
-			0, 1280, &conn_id, 1, &conn->modes[0]);
+			0, 1080, &conn_id, 1, &conn->modes[0]);
+	//注意根据实际修改1080这个参数，为当前测试屏幕height，如果是1024*600的屏幕，就将1080修改为600.	
+		
 	//输入字符
 	getchar();
 	//切换buffer上层
