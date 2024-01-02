@@ -5,7 +5,7 @@ ARCH ?= x86
 #编译器CC
 #根据传入的参数ARCH，确定使用的编译器
 #默认使用gcc编译器
-#make ARCH=arm 时使用ARM-GCC编译器
+#make ARCH=ARM64 时使用ARM-GCC编译器
 ifeq ($(ARCH), x86)
 	CC = gcc
 else

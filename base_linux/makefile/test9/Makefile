@@ -23,11 +23,11 @@ CFLAGS = $(patsubst %, -I%, $(INC_DIR))
 
 #根据输入的ARCH变量来选择编译器
 #ARCH=x86，使用gcc
-#ARCH=arm，使用arm-gcc
+#ARCH=arm64，使用arm-gcc
 ifeq ($(ARCH),x86)
 CC = gcc
 else
-CC = arm-linux-gnueabihf-gcc
+CC = aarch64-linux-gnu-gcc
 endif
 
 #目标文件
