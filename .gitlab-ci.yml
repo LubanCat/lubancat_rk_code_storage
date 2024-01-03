@@ -19,7 +19,7 @@ code-pack:
   # when: manual
   script:
     - now="`date +%Y%m%d`"
-    - apt update && apt install -y tar
+    - apt update && apt install -y tar ca-certificates
     # 打包
     - git submodule update --init --recursive
     - git submodule foreach 'git pull origin master'
