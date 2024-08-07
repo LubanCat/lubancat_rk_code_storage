@@ -1,7 +1,7 @@
 /*
 *
 *   file: buzzer.c
-*   date: 2024-08-06
+*   update: 2024-08-07
 *   usage: 
 *       sudo gcc -o buzzer buzzer.c -lgpiod
 *       sudo ./buzzer
@@ -12,15 +12,32 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h> 
 
-#define gpionum_buzzer  (6)
+#define GPIONUM_BUZZER  (6)
+
+struct gpiod_chip *buzzer_gpiochip;        
+struct gpiod_line *buzzer_line; 
+
+static void sigint_handler(int sig_num) 
+{    
+    /* buzzer off */
+    gpiod_line_set_value(buzzer_line, 0);
+
+    /* release line */
+    gpiod_line_release(buzzer_line);
+
+    gpiod_chip_close(buzzer_gpiochip);
+
+    exit(0);  
+}
 
 int main(int argc, char **argv)
 {
     int ret;
 
-    struct gpiod_chip * buzzer_gpiochip;        
-    struct gpiod_line * buzzer_line;                 
+    /* register exit signal ( Ctrl + c ) */
+    signal(SIGINT, sigint_handler);
 
     /* get gpio controller */
     buzzer_gpiochip = gpiod_chip_open("/dev/gpiochip6");  
@@ -31,7 +48,7 @@ int main(int argc, char **argv)
     }
 
     /* get gpio line */
-    buzzer_line = gpiod_chip_get_line(buzzer_gpiochip, gpionum_buzzer);
+    buzzer_line = gpiod_chip_get_line(buzzer_gpiochip, GPIONUM_BUZZER);
     if(buzzer_line == NULL)
     {
         printf("gpiod_chip_get_line error : 0\n");
