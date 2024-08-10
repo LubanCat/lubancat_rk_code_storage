@@ -29,7 +29,7 @@
 
 /* gpionum  
  *
- * A-D : 0-4
+ * A-D : 0-3
  * number = group * 8 + x
  * e.g. : B0 = 1 * 8 + 0 = 8
  *	      C4 = 2 * 8 + 4 = 20 
@@ -39,6 +39,13 @@
 #define GPIONUM_MOTORCTRL_AIN2      (8)
 #define GPIONUM_MOTORCTRL_BIN1      (9)
 #define GPIONUM_MOTORCTRL_BIN2      (10)
+
+/* pwmchip */
+#define PWMCHIP_MOTORCTRL_PWMA      "pwmchip1"
+#define PWMCHANNEL_MOTORCTRL_PWMA   "0"
+
+#define PWMCHIP_MOTORCTRL_PWMB      "pwmchip2"
+#define PWMCHANNEL_MOTORCTRL_PWMB   "0"
 
 struct gpiod_chip *STBY_gpiochip;
 struct gpiod_chip *AIN1_gpiochip;   
@@ -360,8 +367,8 @@ int main(int argc, char **argv)
     }
 
     /* init pwm1 */
-    snprintf(pwm1.pwmchip, sizeof(pwm1.pwmchip), "%s", "pwmchip1");
-    snprintf(pwm1.channel, sizeof(pwm1.channel), "%s", "0");
+    snprintf(pwm1.pwmchip, sizeof(pwm1.pwmchip), "%s", PWMCHIP_MOTORCTRL_PWMA);
+    snprintf(pwm1.channel, sizeof(pwm1.channel), "%s", PWMCHANNEL_MOTORCTRL_PWMA);
     ret = pwm_init(pwm1);
     if(ret == -1)
     {
@@ -370,8 +377,8 @@ int main(int argc, char **argv)
     }
 
     /* inti pwm2 */
-    snprintf(pwm2.pwmchip, sizeof(pwm2.pwmchip), "%s", "pwmchip2");
-    snprintf(pwm2.channel, sizeof(pwm2.channel), "%s", "0");
+    snprintf(pwm2.pwmchip, sizeof(pwm2.pwmchip), "%s", PWMCHIP_MOTORCTRL_PWMB);
+    snprintf(pwm2.channel, sizeof(pwm2.channel), "%s", PWMCHANNEL_MOTORCTRL_PWMB);
     ret = pwm_init(pwm2);
     if(ret == -1)
     {
