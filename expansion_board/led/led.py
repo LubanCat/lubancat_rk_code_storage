@@ -1,41 +1,74 @@
+###############################################
+#
+#  file: led.py
+#  update: 2024-08-10
+#  usage: 
+#      sudo python led.py
+#
+###############################################
+
 import time
 import gpiod
 
-# 根据需要控制的引脚修改
-LINE0_OFFSET = 0
-LINE1_OFFSET = 1
-LINE2_OFFSET = 2
+class GPIO:
+    global gpio, gpiochip
 
-chip0 = gpiod.Chip("6", gpiod.Chip.OPEN_BY_NUMBER)
+    def __init__(self, gpionum, gpiochipx, val):
+        self.gpiochip = gpiod.Chip(gpiochipx, gpiod.Chip.OPEN_BY_NUMBER)
+        self.gpio = self.gpiochip.get_line(gpionum)
+        self.gpio.request(consumer="gpio", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[val])
+    
+    def set(self, val):
+        self.gpio.set_value(val)
 
-gpio6_0 = chip0.get_line(LINE0_OFFSET)
-gpio6_1 = chip0.get_line(LINE1_OFFSET)
-gpio6_2 = chip0.get_line(LINE2_OFFSET)
+    def release(self):
+        self.gpio.release()
 
-gpio6_0.request(consumer="gpio", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[0])
-gpio6_1.request(consumer="gpio", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[0])
-gpio6_2.request(consumer="gpio", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[0])
+# led gpiochip
+gpiochip_led = "6"
 
+# led gpionum
+gpionum_r_led = 0
+gpionum_g_led = 1
+gpionum_b_led = 2
 
-print(gpio6_0.consumer())
-print(gpio6_1.consumer())
-print(gpio6_2.consumer())
+# led init
+red_led = GPIO(gpionum_r_led, gpiochip_led, 1)          # 初始化红色led, 初始电平为高电平，灯灭
+green_led = GPIO(gpionum_g_led, gpiochip_led, 1)        # 初始化绿色led, 初始电平为高电平，灯灭
+blue_led = GPIO(gpionum_b_led, gpiochip_led, 1)         # 初始化蓝色led, 初始电平为高电平，灯灭
 
-try:
-    while True:
-        gpio6_0.set_value(1)
-        gpio6_1.set_value(1)
-        gpio6_2.set_value(1)
-        time.sleep(0.5)
-        gpio6_0.set_value(0)
-        gpio6_0.set_value(0)
-        gpio6_0.set_value(0)
-        time.sleep(0.5)
-finally:
-    gpio6_0.set_value(1)
-    gpio6_1.set_value(1)
-    gpio6_2.set_value(1)
-    gpio6_0.release()
-    gpio6_1.release()
-    gpio6_2.release()
+def main():
+    try:
+        while True:
+            
+            red_led.set(0)
+            green_led.set(0)
+            blue_led.set(0)
+
+            time.sleep(0.5)
+
+            red_led.set(1)
+            green_led.set(1)
+            blue_led.set(1)
+
+            time.sleep(0.5)
+
+    except Exception as e:
+        
+        print("exit...：", e)
+    
+    finally:
+        
+        # led off
+        red_led.set(1)
+        green_led.set(1)
+        blue_led.set(1)
+
+        # led release
+        red_led.release()
+        green_led.release()
+        blue_led.release()
+        
+if __name__ == "__main__":  
+    main()
 

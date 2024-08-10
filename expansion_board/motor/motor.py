@@ -1,131 +1,97 @@
+###############################################
+#
+#  file: motor.py
+#  update: 2024-08-10
+#  usage: 
+#      sudo python motor.py
+#
+###############################################
+
 from periphery import PWM
 import time
 import gpiod
 
-class car_pwm(object):
-    global PWMA,PWMB
-    global gpio4_C4,gpio3_B0,gpio1_B1,gpio1_B2,gpio1_B0_STYB
-    def pwm_init():
-        global PWMA,PWMB
-        global gpio4_C4,gpio3_B0,gpio1_B1,gpio1_B2
-        AIN1 = 20
-        AIN2 = 8
-        
-        BIN1 = 9
-        BIN2 = 10
-		
-        STBY = 8
-        #创建了一个chip ID为0的gpiod.Chip对象chip0
-        chip0 = gpiod.Chip("4", gpiod.Chip.OPEN_BY_NUMBER)
-        chip1 = gpiod.Chip("3", gpiod.Chip.OPEN_BY_NUMBER)
-        chip2 = gpiod.Chip("1", gpiod.Chip.OPEN_BY_NUMBER)
-        chip3 = gpiod.Chip("1", gpiod.Chip.OPEN_BY_NUMBER)
-        chip4 = gpiod.Chip("1", gpiod.Chip.OPEN_BY_NUMBER)
-        #设置使用chip0对象的AIN1作为引脚
-        gpio4_C4 = chip0.get_line(AIN1)
-        gpio3_B0 = chip1.get_line(AIN2)
-        gpio1_B1 = chip2.get_line(BIN1)
-        gpio1_B2 = chip3.get_line(BIN2)
-        gpio1_B0_STYB= chip3.get_line(STBY)
+class GPIO:
+    global gpio, gpiochip
 
-        #设置AIN1、AIN2默认为1、0正转
-        gpio4_C4.request(consumer="AIN1", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[0])
-        gpio3_B0.request(consumer="AIN2", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[1])
-        gpio1_B1.request(consumer="BIN1", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[0])
-        gpio1_B2.request(consumer="BIN2", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[1])  
-        gpio1_B0_STYB.request(consumer="STBY", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[1])  	
-
-        # 定义占空比递增步长
-        step = 0.05
-        # 定义range最大范围
-        rangeMax = int(1/0.05)
-        # 打开 PWMA, channel 0 ,对应开发板上PWM8外设
-        PWMA = PWM(1, 0)
-        PWMB = PWM(2, 0)
-        # 设置PWM输出B频率为 1 kHz
-        PWMA.frequency = 1e3
-        PWMB.frequency = 1e3
-        # 设置占空比为 0%，一个周期内高电平的时间与整个周期时间的比例。
+    def __init__(self, gpionum, gpiochipx, val):
+        self.gpiochip = gpiod.Chip(gpiochipx, gpiod.Chip.OPEN_BY_NUMBER)
+        self.gpio = self.gpiochip.get_line(gpionum)
+        self.gpio.request(consumer="gpio", type=gpiod.LINE_REQ_DIR_OUT, default_vals=[val])
     
-        PWMA.duty_cycle = 0.2
-        PWMB.duty_cycle = 0.2
-        # 开启PWM输出
-        PWMA.enable()
-        PWMB.enable()
+    def set(self, val):
+        self.gpio.set_value(val)
 
-    def pwm_set_duty_cycle_and_Diversion(left_pwm,right_pwm):
-        global PWMA,PWMB
-        global gpio4_C4,gpio3_B0,gpio1_B1,gpio1_B2
-        global AIN1,AIN2,BIN1,BIN2
-        #if(-1<=left_pwm<=1 and -1<=right_pwm<=1):
-        #    if(left_pwm>=0):
-        #        PWMA.duty_cycle = left_pwm
-        #    else:
-        #        PWMA.duty_cycle = -left_pwm
-        #    if(right_pwm>=0):
-        #        PWMB.duty_cycle = right_pwm
-        #    else:
-        #        PWMB.duty_cycle = -right_pwm
-        #else :
-        #    print("value error!")
+    def release(self):
+        self.gpio.release()
 
-        if(left_pwm>=0):
-            gpio4_C4.set_value(0)
-            gpio3_B0.set_value(1)
-        else:
-            gpio4_C4.set_value(1)
-            gpio3_B0.set_value(0)
-        if(1-(0.05+abs(left_pwm)*1.17)>0):
-            PWMA.duty_cycle=1-(0.05+abs(left_pwm)*1.17)
-        else:
-            PWMA.duty_cycle=0.0
+# motor controller
+# motor controller gpionum
+#
+# A-D : 0-4
+# number = group * 8 + x
+# e.g. : B0 = 1 * 8 + 0 = 8
+#	     C4 = 2 * 8 + 4 = 20 
+#
+gpionum_motor_STBY = 8          # GPIO1_B0
+gpionum_motor_AIN1 = 20         # GPIO4_C4
+gpionum_motor_AIN2 = 8          # GPIO3_B0
+gpionum_motor_BIN1 = 9          # GPIO1_B1
+gpionum_motor_BIN2 = 10         # GPIO1_B2
+# motor controller gpiochip
+gpiochip_motor_STBY = "1"       # gpiochip1
+gpiochip_motor_AIN1 = "4"       # gpiochip4
+gpiochip_motor_AIN2 = "3"       # gpiochip3
+gpiochip_motor_BIN1 = "1"       # gpiochip1
+gpiochip_motor_BIN2 = "1"       # gpiochip1
+# motor controller pwmchip, pwm channel
+motor_PWMA = PWM(1, 0)          # pwmchip1, channel0
+motor_PWMB = PWM(2, 0)          # pwmchip2, channel0
 
-        if(right_pwm>=0):
-            gpio1_B1.set_value(0)
-            gpio1_B2.set_value(1)
-        else:
-            gpio1_B1.set_value(1)
-            gpio1_B2.set_value(0) 
-        if(1-(0.05+abs(right_pwm)*1.17)>0):
-            PWMB.duty_cycle=1-(0.05+abs(right_pwm)*1.17)
-        else:
-            PWMB.duty_cycle=0.0
+# motor init
+motor_STBY = GPIO(gpionum_motor_STBY, gpiochip_motor_STBY, 0)   # 初始化电机驱动板STBY引脚, 初始电平为低电平，驱动板不工作
+motor_AIN1 = GPIO(gpionum_motor_AIN1, gpiochip_motor_AIN1, 0)   # 初始化电机驱动板AIN1引脚, 初始电平为低电平
+motor_AIN2 = GPIO(gpionum_motor_AIN2, gpiochip_motor_AIN2, 1)   # 初始化电机驱动板AIN2引脚, 初始电平为高电平
+motor_BIN1 = GPIO(gpionum_motor_BIN1, gpiochip_motor_BIN1, 0)   # 初始化电机驱动板BIN1引脚, 初始电平为低电平
+motor_BIN2 = GPIO(gpionum_motor_BIN2, gpiochip_motor_BIN2, 1)   # 初始化电机驱动板BIN2引脚, 初始电平为高电平
 
+motor_PWMA.frequency = 1e3          # 频率 1kHz
+motor_PWMA.duty_cycle = 0.4         # 占空比（%），范围：0.0-1.0
+motor_PWMA.polarity = "normal"      # 极性
+motor_PWMA.enable()                 # 使能
 
-    def pwm_set_frequency(A_value,B_value):
-        global PWMA,PWMB
-        PWMA.frequency = A_value
-        PWMB.frequency = B_value
+motor_PWMB.frequency = 1e3
+motor_PWMB.duty_cycle = 0.4
+motor_PWMB.polarity = "normal"
+motor_PWMB.enable()
 
-    def pwm_close():
-        global PWMA,PWMB
-        global gpio4_C4,gpio3_B0,gpio1_B1,gpio1_B2
-        # 退出时
-        PWMA.duty_cycle = 1.00
-        PWMB.duty_cycle = 1.00
-        # 释放资源
-        PWMA.close()
-        PWMB.close()
-        gpio4_C4.release()
-        gpio3_B0.release()
-        gpio1_B1.release()
-        gpio1_B2.release()
-    
 def main():
     try:
-        car_pwm.pwm_init()
         while True:
-            car_pwm.pwm_set_duty_cycle_and_Diversion(0.2,0.2)
-            time.sleep(1)
-            car_pwm.pwm_set_duty_cycle_and_Diversion(-0.2,-0.2)
-            time.sleep(1)
-            #print(abs(-5))
-    except:
-        car_pwm.pwm_close()
-        print("except!\n")
+            
+            motor_STBY.set(1)       # 电机驱动板使能
 
+            time.sleep(2)
 
-main()
+            motor_STBY.set(0)       # 电机驱动板关闭
 
+            time.sleep(2)
 
-
+    except Exception as e:
+        
+        print("exit...：", e)
+    
+    finally:
+        
+        # motor off
+        motor_STBY.set(0)
+        
+        # motor gpio release
+        motor_STBY.release()
+        motor_AIN1.release()
+        motor_AIN2.release()
+        motor_BIN1.release()
+        motor_BIN2.release()
+        
+if __name__ == "__main__":  
+    main()
