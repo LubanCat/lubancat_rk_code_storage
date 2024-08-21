@@ -8,7 +8,10 @@
 | python_lubancat_RK_tutorial_code | 鲁班猫-RK系列python配套例程 |
 | lubancat_ai_manual_code |  嵌入式AI应用开发实战指南 |
 | lubancat_qt_tutorial_code | 嵌入式Qt应用开发指南  |
+| expansion_board       |   鲁班猫扩展板应用例程|
 | test       |   鲁班猫-RK系列40pin引脚测试代码 |
+
+
 
 
 # 在线文档预览
