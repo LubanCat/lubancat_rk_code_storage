@@ -1,0 +1,6 @@
+Qt教程中例程代码之外的软件工具、库包等内容请从鲁班猫云盘资料下载：
+
+https://doc.embedfire.com/products/link/zh/latest/linux/ebf_lubancat.html
+
+云盘资料中：
+鲁班猫_瑞芯微系列\1-野火开源图书_教程文档\配套代码\综合代码\Qt教程相关源文件
