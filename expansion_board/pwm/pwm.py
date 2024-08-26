@@ -1,43 +1,68 @@
+###############################################
+#
+#  file: pwm.py
+#  update: 2024-08-12
+#  usage: 
+#      sudo python pwm.py
+#
+###############################################
+
 from periphery import PWM
 import time
 
-try:
-    # 定义占空比递增步长
-    step = 0.05
-    # 定义range最大范围
-    rangeMax = int(1/0.05)
-    # 打开对应开发板上PWM外设
-    pwm1 = PWM(1,0)
-    pwm2 = PWM(2,0)
-    # 设置PWM输出频率为 1 kHz
-    pwm1.frequency = 1e3
-    pwm2.frequency = 1e3
-    # 设置占空比为 0%，一个周期内高电平的时间与整个周期时间的比例。
-    pwm1.duty_cycle = 0.00
-    pwm2.frequency = 1e3
-    # 开启PWM输出
-    pwm1.enable()
+def main():
+
+    pwm1 = PWM(1, 0)                # pwmchip1, channel0
+    pwm2 = PWM(2, 0)                # pwmchip2, channel0
+
+    pwm1.frequency = 50             # 频率 50Hz
+    pwm2.frequency = 50
+
+    pwm1.duty_cycle = 0.025         # 占空比（%），范围：0.0-1.0
+    pwm2.duty_cycle = 0.025
+
+    pwm1.enable()                   # 使能
     pwm2.enable()
-    while True:
-        for i in range(0,rangeMax):
-            # 休眠step秒
-            time.sleep(step)
-            # 设置占空比每次加 step% , 使用 round 避免浮点运算误差
-            pwm1.duty_cycle = round(pwm1.duty_cycle+step,2)
-            pwm2.duty_cycle = round(pwm2.duty_cycle+step,2)
-        # 常灭1秒
-        if pwm1.duty_cycle == 0.0:
+
+    try:
+        while True:
+            
+            pwm1.duty_cycle = 0.025         # 2.5%（0.5ms），0度
+            pwm2.duty_cycle = 0.025
+
             time.sleep(1)
-        for i in range(0,rangeMax):
-            time.sleep(step)
-            pwm1.duty_cycle = round(pwm1.duty_cycle-step,2)
-            pwm2.duty_cycle = round(pwm2.duty_cycle-step,2)
-except:
-    print("Some errors occur!\n")
-finally:
-    # 退出时
-    pwm1.duty_cycle = 0.0
-    pwm2.duty_cycle = 0.0
-    # 释放资源
-    pwm1.close()
-    pwm2.close()
+
+            pwm1.duty_cycle = 0.05          # 5%（1ms），45度
+            pwm2.duty_cycle = 0.05
+
+            time.sleep(1)
+
+            pwm1.duty_cycle = 0.075         # 7.5%（1.5ms），90度
+            pwm2.duty_cycle = 0.075
+
+            time.sleep(1)
+
+            pwm1.duty_cycle = 0.1           # 10%（2ms），135度
+            pwm2.duty_cycle = 0.1
+
+            time.sleep(1)
+
+            pwm1.duty_cycle = 0.125         # 12.5%（2.5ms），180度
+            pwm2.duty_cycle = 0.125
+
+            time.sleep(1)
+
+    except Exception as e:
+        
+        print("exit...：", e)
+    
+    finally:
+
+        pwm1.duty_cycle = 0.025         # 2.5%（0.5ms），0度
+        pwm2.duty_cycle = 0.025
+        
+        pwm1.close()
+        pwm2.close()
+        
+if __name__ == "__main__":  
+    main()
