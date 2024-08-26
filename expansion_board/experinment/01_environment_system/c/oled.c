@@ -9,6 +9,9 @@
 
 #include "oled.h"
 
+static int file;
+static char filename[20];
+
 /*****************************
  * @brief : oled写命令
  * @param : cmd 要写入的命令
@@ -149,20 +152,40 @@ void oled_clear(void)
 }
 
 /*****************************
+ * @brief : oled清除某一页
+ * @param : page, 要清除的页码，0-7
+ * @return: none
+*****************************/
+void oled_clear_page(int page)
+{
+    uint8_t row;
+
+    if(page < 0 || page > 7)
+        return;
+
+	oled_write_command(0xb0 + page);	    
+    oled_write_command(0x00);      		
+    oled_write_command(0x10);      		
+
+    for(row=0; row<128; row++)
+        oled_write_data(0x00);
+}
+
+/*****************************
  * @brief : oled初始化
  * @param : none
  * @return: none
 *****************************/
 int oled_init(void)
 {
-    file = open_i2c_dev(i2c_bus, filename, sizeof(filename), 0);
+    file = open_i2c_dev(OLED_I2C_BUS, filename, sizeof(filename), 0);
 	if (file < 0)
 	{
 		printf("can't open %s\n", filename);
 		return -1;
 	}
 
-	if (set_slave_addr(file, dev_addr, 1))
+	if (set_slave_addr(file, OLED_I2C_DEV_ADDR, 1))
 	{
 		printf("can't set_slave_addr\n");
 		return -1;

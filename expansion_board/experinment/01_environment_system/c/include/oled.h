@@ -23,17 +23,16 @@
 #include <signal.h> 
 #include "font.h"
 
-#define SIZE    (16)
+#define SIZE                    (16)
 
-static uint8_t dev_addr = 0x3c;
-static int i2c_bus = 3;
-static int file;
-static char filename[20];
+#define OLED_I2C_DEV_ADDR       0x3c
+#define OLED_I2C_BUS            3
 
 void oled_show_char(uint8_t x, uint8_t y, uint8_t achar);
 void oled_show_string(uint8_t x, uint8_t y, const uint8_t *string);
 void oled_show_chinese(uint8_t x, uint8_t y, uint8_t no);
 void oled_clear(void);
+void oled_clear_page(int page);
 int oled_init(void);
 
 #endif
