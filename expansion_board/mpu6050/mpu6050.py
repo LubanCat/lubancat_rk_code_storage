@@ -1,3 +1,12 @@
+###############################################
+#
+#  file: mpu6050.py
+#  update: 2024-08-27
+#  usage: 
+#      sudo python mpu6050.py
+#
+###############################################
+
 import time
 import board
 import busio
@@ -6,7 +15,7 @@ import math
 import numpy as np
 import threading
 
-global k_roll , k_pitch,acc,gyro
+global k_roll, k_pitch, acc, gyro
 
 class MPU6050(object):
 
@@ -168,16 +177,26 @@ class MPU6050(object):
         #mpu.release()
 
 def main():
+
     try:
+
         MPU6050.mpu6050_init()
         MPU6050.mpu6050_Kalman_threading()
+
         while True:
             #print(666)
             print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2"%(acc))
             print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s"%(gyro))
-            print("roll:%.2f,pitch:%.2f"%(k_roll , k_pitch))
+            print("roll:%.2f,pitch:%.2f"%(k_roll, k_pitch))
             print("")
             time.sleep(0.02)
+
+    except Exception as e:
+        
+        print("exit...：", e)
+
     finally:
         MPU6050.mpu6050_close()
-main()
+
+if __name__ == "__main__":  
+    main()
