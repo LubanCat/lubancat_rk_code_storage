@@ -8,6 +8,12 @@
 
 #include "led.h"
 
+struct gpiod_chip *led_gpiochip;        
+
+struct gpiod_line *r_led_line;          
+struct gpiod_line *g_led_line;       
+struct gpiod_line *b_led_line;
+
 /*****************************
  * @brief : led初始化
  * @param : none
@@ -83,12 +89,25 @@ int led_init(void)
  * @param : line，要使能的led（r_led_line：红灯，g_led_line：绿灯，b_led_line：蓝灯）
  * @return: none
 *****************************/
-void led_on(struct gpiod_line *line)
+void led_on(unsigned int led_color)
 {
-    if(line == NULL)
+    if(r_led_line == NULL || g_led_line == NULL || b_led_line == NULL)
         return;
-
-    gpiod_line_set_value(line, 0);
+    
+    switch(led_color)
+    {
+        case LED_RED:
+            gpiod_line_set_value(r_led_line, 0);
+            break;
+        case LED_GREEN:
+            gpiod_line_set_value(g_led_line, 0);
+            break;
+        case LED_BLUE:
+            gpiod_line_set_value(b_led_line, 0);
+            break;
+        default:
+            break;
+    }
 }
 
 /*****************************
@@ -96,12 +115,25 @@ void led_on(struct gpiod_line *line)
  * @param : line，要关闭的led（r_led_line：红灯，g_led_line：绿灯，b_led_line：蓝灯）
  * @return: none
 *****************************/
-void led_off(struct gpiod_line *line)
+void led_off(unsigned int led_color)
 {
-    if(line == NULL)
+    if(r_led_line == NULL || g_led_line == NULL || b_led_line == NULL)
         return;
 
-    gpiod_line_set_value(line, 1);
+    switch(led_color)
+    {
+        case LED_RED:
+            gpiod_line_set_value(r_led_line, 1);
+            break;
+        case LED_GREEN:
+            gpiod_line_set_value(g_led_line, 1);
+            break;
+        case LED_BLUE:
+            gpiod_line_set_value(b_led_line, 1);
+            break;
+        default:
+            break;
+    }
 }
 
 /*****************************
@@ -111,6 +143,9 @@ void led_off(struct gpiod_line *line)
 *****************************/
 void led_release(void)
 {
+    if(r_led_line == NULL || g_led_line == NULL || b_led_line == NULL || led_gpiochip == NULL)
+        return;
+
     /* release line */
     gpiod_line_release(r_led_line);
     gpiod_line_release(g_led_line);

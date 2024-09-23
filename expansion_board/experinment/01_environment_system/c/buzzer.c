@@ -8,6 +8,9 @@
 
 #include "buzzer.h"
 
+struct gpiod_chip *buzzer_gpiochip;    
+struct gpiod_line *buzzer_line; 
+
 /*****************************
  * @brief : 蜂鸣器初始化
  * @param : none
@@ -51,7 +54,8 @@ int buzzer_init(void)
 *****************************/
 void buzzer_on(void)
 {
-    gpiod_line_set_value(buzzer_line, 1);
+    if(buzzer_line != NULL)
+        gpiod_line_set_value(buzzer_line, 1);
 }
 
 /*****************************
@@ -61,7 +65,8 @@ void buzzer_on(void)
 *****************************/
 void buzzer_off(void)
 {
-    gpiod_line_set_value(buzzer_line, 0);
+    if(buzzer_line != NULL)
+        gpiod_line_set_value(buzzer_line, 0);
 }
 
 /*****************************
@@ -71,6 +76,9 @@ void buzzer_off(void)
 *****************************/
 void buzzer_release(void)
 {
+    if(buzzer_line == NULL || buzzer_gpiochip == NULL)
+        return;
+    
     /* release line */
     gpiod_line_release(buzzer_line);
     gpiod_chip_close(buzzer_gpiochip);

@@ -17,46 +17,7 @@ import board
 import busio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
-
-# led 
-# led gpionum
-gpionum_r_led = 0
-gpionum_g_led = 1
-# led gpiochip
-gpiochip_led = "6"
-
-# buzzer 
-# buzzer gpionum
-gpionum_buzzer = 6
-# buzzer gpiochip
-gpiochip_buzzer = "6"
-
-# motor controller
-# motor controller gpionum
-#
-# A-D : 0-4
-# number = group * 8 + x
-# e.g. : B0 = 1 * 8 + 0 = 8
-#	     C4 = 2 * 8 + 4 = 20 
-#
-gpionum_motor_STBY = 8          # GPIO1_B0
-gpionum_motor_AIN1 = 20         # GPIO4_C4
-gpionum_motor_AIN2 = 8          # GPIO3_B0
-gpionum_motor_BIN1 = 9          # GPIO1_B1
-gpionum_motor_BIN2 = 10         # GPIO1_B2
-# motor controller gpiochip
-gpiochip_motor_STBY = "1"       # gpiochip1
-gpiochip_motor_AIN1 = "4"       # gpiochip4
-gpiochip_motor_AIN2 = "3"       # gpiochip3
-gpiochip_motor_BIN1 = "1"       # gpiochip1
-gpiochip_motor_BIN2 = "1"       # gpiochip1
-# motor controller pwmchip, pwm channel
-motor_PWMA = PWM(1, 0)          # pwmchip1, channel0
-motor_PWMB = PWM(2, 0)          # pwmchip2, channel0
-
-# 温湿度阈值
-MAX_TEMPERATURE = 35    
-MAX_HUMIDITY = 60       
+from config import ConfigManager 
 
 class GPIO:
     global gpio, gpiochip
@@ -72,35 +33,29 @@ class GPIO:
     def release(self):
         self.gpio.release()
 
-# motor init
-motor_STBY = GPIO(gpionum_motor_STBY, gpiochip_motor_STBY, 0)   # 初始化电机驱动板STBY引脚, 初始电平为低电平，驱动板不工作
-motor_AIN1 = GPIO(gpionum_motor_AIN1, gpiochip_motor_AIN1, 0)   # 初始化电机驱动板AIN1引脚, 初始电平为低电平
-motor_AIN2 = GPIO(gpionum_motor_AIN2, gpiochip_motor_AIN2, 1)   # 初始化电机驱动板AIN2引脚, 初始电平为高电平
-motor_BIN1 = GPIO(gpionum_motor_BIN1, gpiochip_motor_BIN1, 0)   # 初始化电机驱动板BIN1引脚, 初始电平为低电平
-motor_BIN2 = GPIO(gpionum_motor_BIN2, gpiochip_motor_BIN2, 1)   # 初始化电机驱动板BIN2引脚, 初始电平为高电平
+# 通过配置文件获取外设信息
+config_file = '../configuration.json' 
+config_manager = ConfigManager(config_file)  
+if config_manager.inspect_current_environment() is not True:  
+    exit()
 
-motor_PWMA.frequency = 1e3          # 频率 1kHz
-motor_PWMA.duty_cycle = 0.4         # 占空比（%），范围：0.0-1.0
-motor_PWMA.polarity = "normal"      # 极性
-motor_PWMA.enable()                 # 使能
+# oled初始化
+oled_config = config_manager.get_board_config("oled")           # 从配置文件中获取oled相关配置信息 
+if oled_config is None:  
+    print("can not find 'oled' key in ", config_file)
+    exit()
 
-motor_PWMB.frequency = 1e3
-motor_PWMB.duty_cycle = 0.4
-motor_PWMB.polarity = "normal"
-motor_PWMB.enable()
-#-----------------------------------------------------------------
+bus_number = oled_config['bus']                                 # 获取键值bus
+scl_name = f"I2C{bus_number}_SCL"  
+sda_name = f"I2C{bus_number}_SDA"
 
-# led init
-red_led = GPIO(gpionum_r_led, gpiochip_led, 1)          # 初始化红色led, 初始电平为高电平，灯灭
-green_led = GPIO(gpionum_g_led, gpiochip_led, 1)        # 初始化绿色led, 初始电平为高电平，灯灭
-#-----------------------------------------------------------------
+try:                                                    
+    scl_pin = getattr(board, scl_name)  
+    sda_pin = getattr(board, sda_name)  
+except AttributeError:  
+    raise ValueError(f"Unsupported I2C bus number: {bus_number}, no pins found for SCL ({scl_name}) or SDA ({sda_name})")
 
-# buzzer init
-buzzer = GPIO(gpionum_buzzer, gpiochip_buzzer, 0)       # 初始化蜂鸣器, 初始电平为低电平，蜂鸣器不鸣响
-#-----------------------------------------------------------------
-
-# oled init
-i2c = busio.I2C(board.I2C3_SCL, board.I2C3_SDA)
+i2c = busio.I2C(scl_pin, sda_pin)
 disp = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c)
 
 width = disp.width  
@@ -114,7 +69,64 @@ x = 5
 top = 5  
 #-----------------------------------------------------------------
 
-# dht11 init
+# 电机驱动板初始化
+motor_config = config_manager.get_board_config("motor-driver-board")    # 从配置文件中获取电机驱动板相关配置信息  
+if motor_config is None:  
+    print("can not find 'motor-driver-board' key in ", config_file)
+    exit()
+
+gpionum_motor_STBY = motor_config['stby_pin_num']               # 获取电机驱动板引脚信息
+gpionum_motor_AIN1 = motor_config['ain1_pin_num']          
+gpionum_motor_AIN2 = motor_config['ain2_pin_num']           
+gpionum_motor_BIN1 = motor_config['bin1_pin_num']          
+gpionum_motor_BIN2 = motor_config['bin2_pin_num']          
+
+gpiochip_motor_STBY = motor_config['stby_pin_chip']       
+gpiochip_motor_AIN1 = motor_config['ain1_pin_chip']       
+gpiochip_motor_AIN2 = motor_config['ain2_pin_chip']       
+gpiochip_motor_BIN1 = motor_config['bin1_pin_chip']       
+gpiochip_motor_BIN2 = motor_config['bin2_pin_chip']       
+
+motor_STBY = GPIO(gpionum_motor_STBY, gpiochip_motor_STBY, 0)   # 初始化电机驱动板STBY引脚, 初始电平为低电平，驱动板不工作
+motor_AIN1 = GPIO(gpionum_motor_AIN1, gpiochip_motor_AIN1, 0)   # 初始化电机驱动板AIN1引脚, 初始电平为低电平
+motor_AIN2 = GPIO(gpionum_motor_AIN2, gpiochip_motor_AIN2, 1)   # 初始化电机驱动板AIN2引脚, 初始电平为高电平
+motor_BIN1 = GPIO(gpionum_motor_BIN1, gpiochip_motor_BIN1, 0)   # 初始化电机驱动板BIN1引脚, 初始电平为低电平
+motor_BIN2 = GPIO(gpionum_motor_BIN2, gpiochip_motor_BIN2, 1)   # 初始化电机驱动板BIN2引脚, 初始电平为高电平
+
+pwma_chip = motor_config['pwma_chip']                           # 获取电机驱动板pwm信息
+pwmb_chip = motor_config['pwmb_chip']
+
+motor_PWMA = PWM(pwma_chip, 0)                                  # 默认使用channel0
+motor_PWMB = PWM(pwmb_chip, 0)                                  # 默认使用channel0
+
+motor_PWMA.frequency = 1e3                                      # 频率 1kHz
+motor_PWMA.duty_cycle = 0.4                                     # 占空比（%），范围：0.0-1.0
+motor_PWMA.polarity = "normal"                                  # 极性
+motor_PWMA.enable()                                             # 使能
+
+motor_PWMB.frequency = 1e3
+motor_PWMB.duty_cycle = 0.4
+motor_PWMB.polarity = "normal"
+motor_PWMB.enable()
+#-----------------------------------------------------------------
+
+# led初始化
+gpionum_r_led = 0
+gpionum_g_led = 1
+gpiochip_led = "6"
+red_led = GPIO(gpionum_r_led, gpiochip_led, 1)                  # 初始化红色led, 初始电平为高电平，灯灭
+green_led = GPIO(gpionum_g_led, gpiochip_led, 1)                # 初始化绿色led, 初始电平为高电平，灯灭
+#-----------------------------------------------------------------
+
+# 蜂鸣器初始化
+gpionum_buzzer = 6
+gpiochip_buzzer = "6"
+buzzer = GPIO(gpionum_buzzer, gpiochip_buzzer, 0)               # 初始化蜂鸣器, 初始电平为低电平，蜂鸣器不鸣响
+#-----------------------------------------------------------------
+
+# dht11初始化
+MAX_TEMPERATURE = 35    
+MAX_HUMIDITY = 60
 dht11_fd = os.open('/dev/dht11', os.O_RDONLY)
 #-----------------------------------------------------------------
 

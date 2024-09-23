@@ -20,15 +20,13 @@
 
 #define GPIOCHIP_DEV    "/dev/gpiochip6"
 
-struct gpiod_chip *led_gpiochip;        
-
-struct gpiod_line *r_led_line;          
-struct gpiod_line *g_led_line;       
-struct gpiod_line *b_led_line;
+#define LED_RED         (1)
+#define LED_GREEN       (2)
+#define LED_BLUE        (3)
 
 int led_init(void);
-void led_on(struct gpiod_line *line);
-void led_off(struct gpiod_line *line);
+void led_on(unsigned int led_color);
+void led_off(unsigned int led_color);
 void led_release(void);
 
 #endif

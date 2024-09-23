@@ -18,10 +18,6 @@
 
 #define GPIOCHIP_DEV    "/dev/gpiochip6"
 
-struct gpiod_chip *buzzer_gpiochip;    
-
-struct gpiod_line *buzzer_line; 
-
 int buzzer_init(void);
 void buzzer_on(void);
 void buzzer_off(void);

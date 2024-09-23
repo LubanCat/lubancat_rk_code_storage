@@ -8,6 +8,22 @@
 
 #include "motor.h"
 
+struct gpiod_chip *STBY_gpiochip;
+struct gpiod_chip *AIN1_gpiochip;   
+struct gpiod_chip *AIN2_gpiochip;
+struct gpiod_chip *BIN1_gpiochip;
+struct gpiod_chip *BIN2_gpiochip;     
+
+struct gpiod_line *STBY_line;
+struct gpiod_line *AIN1_line;   
+struct gpiod_line *AIN2_line;
+struct gpiod_line *BIN1_line;
+struct gpiod_line *BIN2_line;
+
+pwm pwma, pwmb;
+
+int init_flag = 0;
+
 /*****************************
  * @brief : pwm属性配置
  * @param : pwmx, pwm结构体
@@ -142,46 +158,42 @@ static int pwm_exit(pwm pwmx)
  * @param : BIN1 BIN2, 通道B正反转设置（BIN1=0 BIN2=1 正转）（BIN1=1 BIN2=0 反转）
  * @return: -1初始化失败 0初始化成功
 *****************************/
-int motor_init(uint8_t AIN1, uint8_t AIN2, uint8_t BIN1, uint8_t BIN2)
+int motor_init(const char *stby_gpiochip, const char *ain1_gpiochip, const char *ain2_gpiochip, const char *bin1_gpiochip, const char *bin2_gpiochip, 
+               unsigned int stby_gpionum, unsigned int ain1_gpionum, unsigned int ain2_gpionum, unsigned int bin1_gpionum, unsigned int bin2_gpionum,
+               const char *pwm_a, const char *pwm_b)
 {
     int ret;
 
-    if((AIN1 != 0 && AIN1 != 1) || (AIN2 != 0 && AIN2 != 1) || (BIN1 != 0 && BIN1 != 1) || (BIN2 != 0 && BIN2 != 1))
-    {
-        printf("%s : illegal input-parameters\n", __FUNCTION__);
-        return -1;
-    }
-
     /* get gpio controller */
-    STBY_gpiochip = gpiod_chip_open(GPIOCHIP_MOTORCTRL_STBY);  
+    STBY_gpiochip = gpiod_chip_open(stby_gpiochip);  
     if(STBY_gpiochip == NULL)
     {
         printf("gpiod_chip_open error : STBY_gpiochip\n");
         return -1;
     }
 
-    AIN1_gpiochip = gpiod_chip_open(GPIOCHIP_MOTORCTRL_AIN1);  
+    AIN1_gpiochip = gpiod_chip_open(ain1_gpiochip);  
     if(AIN1_gpiochip == NULL)
     {
         printf("gpiod_chip_open error : AIN1_gpiochip\n");
         return -1;
     }
 
-    AIN2_gpiochip = gpiod_chip_open(GPIOCHIP_MOTORCTRL_AIN2);  
+    AIN2_gpiochip = gpiod_chip_open(ain2_gpiochip);  
     if(AIN2_gpiochip == NULL)
     {
         printf("gpiod_chip_open error : AIN2_gpiochip\n");
         return -1;
     }
 
-    BIN1_gpiochip = gpiod_chip_open(GPIOCHIP_MOTORCTRL_BIN1);  
+    BIN1_gpiochip = gpiod_chip_open(bin1_gpiochip);  
     if(BIN1_gpiochip == NULL)
     {
         printf("gpiod_chip_open error : BIN1_gpiochip\n");
         return -1;
     }
 
-    BIN2_gpiochip = gpiod_chip_open(GPIOCHIP_MOTORCTRL_BIN2);  
+    BIN2_gpiochip = gpiod_chip_open(bin2_gpiochip);  
     if(BIN2_gpiochip == NULL)
     {
         printf("gpiod_chip_open error : BIN2_gpiochip\n");
@@ -189,38 +201,38 @@ int motor_init(uint8_t AIN1, uint8_t AIN2, uint8_t BIN1, uint8_t BIN2)
     }
 
     /* get gpio line */
-    STBY_line = gpiod_chip_get_line(STBY_gpiochip, GPIONUM_MOTORCTRL_STBY);
+    STBY_line = gpiod_chip_get_line(STBY_gpiochip, stby_gpionum);
     if(STBY_line == NULL)
     {
-        printf("gpiod_chip_get_line error : GPIONUM_MOTORCTRL_STBY\n");
+        printf("gpiod_chip_get_line error : STBY\n");
         return -1;
     }
 
-    AIN1_line = gpiod_chip_get_line(AIN1_gpiochip, GPIONUM_MOTORCTRL_AIN1);
+    AIN1_line = gpiod_chip_get_line(AIN1_gpiochip, ain1_gpionum);
     if(AIN1_line == NULL)
     {
-        printf("gpiod_chip_get_line error : GPIONUM_MOTORCTRL_AIN1\n");
+        printf("gpiod_chip_get_line error : AIN1\n");
         return -1;
     }
 
-    AIN2_line = gpiod_chip_get_line(AIN2_gpiochip, GPIONUM_MOTORCTRL_AIN2);
+    AIN2_line = gpiod_chip_get_line(AIN2_gpiochip, ain2_gpionum);
     if(AIN2_line == NULL)
     {
-        printf("gpiod_chip_get_line error : GPIONUM_MOTORCTRL_AIN2\n");
+        printf("gpiod_chip_get_line error : AIN2\n");
         return -1;
     }
 
-    BIN1_line = gpiod_chip_get_line(BIN1_gpiochip, GPIONUM_MOTORCTRL_BIN1);
+    BIN1_line = gpiod_chip_get_line(BIN1_gpiochip, bin1_gpionum);
     if(BIN1_line == NULL)
     {
-        printf("gpiod_chip_get_line error : GPIONUM_MOTORCTRL_BIN1\n");
+        printf("gpiod_chip_get_line error : BIN1\n");
         return -1;
     }
 
-    BIN2_line = gpiod_chip_get_line(BIN2_gpiochip, GPIONUM_MOTORCTRL_BIN2);
+    BIN2_line = gpiod_chip_get_line(BIN2_gpiochip, bin2_gpionum);
     if(BIN2_line == NULL)
     {
-        printf("gpiod_chip_get_line error : GPIONUM_MOTORCTRL_BIN2\n");
+        printf("gpiod_chip_get_line error : BIN2\n");
         return -1;
     }
 
@@ -228,40 +240,40 @@ int motor_init(uint8_t AIN1, uint8_t AIN2, uint8_t BIN1, uint8_t BIN2)
     ret = gpiod_line_request_output(STBY_line, "STBY_line", 0);   
     if(ret < 0)
     {
-        printf("gpiod_line_request_output error : STBY_line\n");
+        printf("gpiod_line_request_output error : STBY\n");
         return -1;
     }
 
-    ret = gpiod_line_request_output(AIN1_line, "AIN1_line", AIN1);   
+    ret = gpiod_line_request_output(AIN1_line, "AIN1_line", 0);   
     if(ret < 0)
     {
-        printf("gpiod_line_request_output error : AIN1_line\n");
+        printf("gpiod_line_request_output error : AIN1\n");
         return -1;
     }
 
-    ret = gpiod_line_request_output(AIN2_line, "AIN2_line", AIN2);   
+    ret = gpiod_line_request_output(AIN2_line, "AIN2_line", 1);   
     if(ret < 0)
     {
-        printf("gpiod_line_request_output error : AIN2_line\n");
+        printf("gpiod_line_request_output error : AIN2\n");
         return -1;
     }
 
-    ret = gpiod_line_request_output(BIN1_line, "BIN1_line", BIN1);   
+    ret = gpiod_line_request_output(BIN1_line, "BIN1_line", 0);   
     if(ret < 0)
     {
-        printf("gpiod_line_request_output error : BIN1_line\n");
+        printf("gpiod_line_request_output error : BIN1\n");
         return -1;
     }
 
-    ret = gpiod_line_request_output(BIN2_line, "BIN2_line", BIN2);   
+    ret = gpiod_line_request_output(BIN2_line, "BIN2_line", 1);   
     if(ret < 0)
     {
-        printf("gpiod_line_request_output error : BIN2_line\n");
+        printf("gpiod_line_request_output error : BIN2\n");
         return -1;
     }
 
     /* init PWMA */
-    snprintf(pwma.pwmchip, sizeof(pwma.pwmchip), "%s", GPIOCHIP_PWMA);
+    snprintf(pwma.pwmchip, sizeof(pwma.pwmchip), "%s", pwm_a);
     snprintf(pwma.channel, sizeof(pwma.channel), "%s", "0");
     ret = pwm_init(pwma);
     if(ret == -1)
@@ -271,7 +283,7 @@ int motor_init(uint8_t AIN1, uint8_t AIN2, uint8_t BIN1, uint8_t BIN2)
     }
 
     /* inti PWMB */
-    snprintf(pwmb.pwmchip, sizeof(pwmb.pwmchip), "%s", GPIOCHIP_PWMB);
+    snprintf(pwmb.pwmchip, sizeof(pwmb.pwmchip), "%s", pwm_b);
     snprintf(pwmb.channel, sizeof(pwmb.channel), "%s", "0");
     ret = pwm_init(pwmb);
     if(ret == -1)
@@ -280,6 +292,7 @@ int motor_init(uint8_t AIN1, uint8_t AIN2, uint8_t BIN1, uint8_t BIN2)
         return ret;
     }
 
+    init_flag = 1;
     return 0;
 }
 
@@ -291,6 +304,9 @@ int motor_init(uint8_t AIN1, uint8_t AIN2, uint8_t BIN1, uint8_t BIN2)
 int motor_release(void) 
 {    
     int ret = 0;
+
+    if(!init_flag)
+        return -1;
 
     /* motor controller off */
     gpiod_line_set_value(STBY_line, 0);
@@ -315,6 +331,8 @@ int motor_release(void)
     ret = pwm_exit(pwmb);
     if(ret == -1)
         printf("pwmb exit fail!\n");
+    
+    init_flag = 0;
 
     return ret;
 }
@@ -326,6 +344,9 @@ int motor_release(void)
 *****************************/
 void motor_on(void)
 {
+    if(!init_flag)
+        return;
+
     gpiod_line_set_value(STBY_line, 1);
 }
 
@@ -336,6 +357,9 @@ void motor_on(void)
 *****************************/
 void motor_off(void)
 {
+    if(!init_flag)
+        return;
+
     gpiod_line_set_value(STBY_line, 0);
 }
 
@@ -346,6 +370,9 @@ void motor_off(void)
 *****************************/
 void motor_channelA_direction_set(uint8_t val1, uint8_t val2)
 {
+    if(!init_flag)
+        return;
+
     if((val1 != 0 && val1 != 1) || (val2 != 0 && val2 != 1))
         return;
 
@@ -360,6 +387,9 @@ void motor_channelA_direction_set(uint8_t val1, uint8_t val2)
 *****************************/
 void motor_channelB_direction_set(uint8_t val1, uint8_t val2)
 {
+    if(!init_flag)
+        return;
+
     if((val1 != 0 && val1 != 1) || (val2 != 0 && val2 != 1))
         return;
 
@@ -368,23 +398,29 @@ void motor_channelB_direction_set(uint8_t val1, uint8_t val2)
 }
 
 /*****************************
- * @brief : 电机驱动板PWMA熟悉设置
+ * @brief : 电机驱动板PWMA属性设置
  * @param : attr, pwm属性
  * @param : val,  pwm属性所要设置的值
  * @return: -1配置失败 0配置成功
 *****************************/
 int motor_pwmA_config(const char *attr, const char *val)
 {
+    if(!init_flag)
+        return -1;
+
     return pwm_config(pwma, attr, val);
 }
 
 /*****************************
- * @brief : 电机驱动板PWMB熟悉设置
+ * @brief : 电机驱动板PWMB属性设置
  * @param : attr, pwm属性
  * @param : val,  pwm属性所要设置的值
  * @return: -1配置失败 0配置成功
 *****************************/
 int motor_pwmB_config(const char *attr, const char *val)
 {
+    if(!init_flag)
+        return -1;
+    
     return pwm_config(pwmb, attr, val);
 }
