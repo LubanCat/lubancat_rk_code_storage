@@ -8,6 +8,8 @@
 
 #include "pwm.h"
 
+int flag_init = 0;
+
 /*****************************
  * @brief : pwm属性配置
  * @param : pwmx, pwm结构体
@@ -20,6 +22,9 @@ int pwm_config(pwm pwmx, const char *attr, const char *val)
     char temp_path[100];
     int len;
     int fd;
+
+    if(!flag_init)
+        return -1;
 
     if (pwmx.pwmchip == NULL || pwmx.channel == NULL || attr == NULL || val == NULL)
     {
@@ -56,6 +61,9 @@ int pwm_init(pwm pwmx)
 {   
     char temp_path[100];
 
+    if(flag_init)
+        return -1;
+
     if (pwmx.pwmchip == NULL || pwmx.channel == NULL)
     {
         printf("%s : illegal input-parameters\n", __FUNCTION__);
@@ -86,6 +94,8 @@ int pwm_init(pwm pwmx)
         close(fd);
     }
 
+    flag_init = 1;
+
     return 0;
 }
 
@@ -97,6 +107,9 @@ int pwm_init(pwm pwmx)
 int pwm_exit(pwm pwmx)
 {
     char temp_path[100];
+
+    if(!flag_init)
+        return -1;
 
     if (pwmx.pwmchip == NULL || pwmx.channel == NULL)
     {
@@ -127,6 +140,8 @@ int pwm_exit(pwm pwmx)
         
         close(fd);
     }
+
+    flag_init = 0;
 
     return 0;
 }

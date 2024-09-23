@@ -19,7 +19,10 @@ static char filename[20];
 *****************************/
 static void oled_write_command(uint8_t cmd)
 {
-    i2c_smbus_write_byte_data(file, 0x00, cmd);
+    if(file > 0)
+        i2c_smbus_write_byte_data(file, 0x00, cmd);
+    else
+        return;
 }
 
 /*****************************
@@ -29,7 +32,10 @@ static void oled_write_command(uint8_t cmd)
 *****************************/
 static void oled_write_data(uint8_t data)
 {
-    i2c_smbus_write_byte_data(file, 0x40, data);
+    if(file > 0)
+        i2c_smbus_write_byte_data(file, 0x40, data);
+    else
+        return;
 }
 
 /*****************************
@@ -173,12 +179,12 @@ void oled_clear_page(int page)
 
 /*****************************
  * @brief : oled初始化
- * @param : none
- * @return: none
+ * @param : i2c_bus i2c总线编号
+ * @return: 0成功 -1失败
 *****************************/
-int oled_init(void)
+int oled_init(int i2c_bus)
 {
-    file = open_i2c_dev(OLED_I2C_BUS, filename, sizeof(filename), 0);
+    file = open_i2c_dev(i2c_bus, filename, sizeof(filename), 0);
 	if (file < 0)
 	{
 		printf("can't open %s\n", filename);
@@ -242,4 +248,6 @@ int oled_init(void)
     oled_write_command(0xAF);
 
     oled_clear();                //清屏
+
+    return 0;
 }

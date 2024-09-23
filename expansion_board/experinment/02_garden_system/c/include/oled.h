@@ -26,13 +26,12 @@
 #define SIZE                    (16)
 
 #define OLED_I2C_DEV_ADDR       0x3c
-#define OLED_I2C_BUS            3
 
 void oled_show_char(uint8_t x, uint8_t y, uint8_t achar);
 void oled_show_string(uint8_t x, uint8_t y, const uint8_t *string);
 void oled_show_chinese(uint8_t x, uint8_t y, uint8_t no);
 void oled_clear(void);
 void oled_clear_page(int page);
-int oled_init(void);
+int oled_init(int i2c_bus);
 
 #endif

@@ -1,0 +1,42 @@
+{  
+    "info" : {
+        "name" : "garden_system"
+    },
+
+    "LubanCat-1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "sg90": {
+            "pwm_chip": 1
+        },
+        
+        "hcsr501": {
+            "dout_chip": "6",
+            "dout_pin": 8
+        }
+    }
+
+}

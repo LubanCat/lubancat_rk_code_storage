@@ -23,16 +23,16 @@ int init_flag = 0;
  * @param : none
  * @return: 0初始化成功 -1初始化失败
 *****************************/
-static int spi_init(void)
+static int spi_init(const char *spi_dev)
 {
     int ret; 
     SPI_MODE mode;
     char spi_bits;
     SPI_SPEED spi_speed;
 
-    fd_spidev = open(BME280_SPI_DEV, O_RDWR);
+    fd_spidev = open(spi_dev, O_RDWR);
 	if (fd_spidev < 0) {
-		printf("open %s err\n", BME280_SPI_DEV);
+		printf("open %s err\n", spi_dev);
 		return -1;
 	}
 
@@ -452,13 +452,15 @@ float bme280_get_humi(void)
  * @param : none
  * @return: 0初始化成功 -1初始化失败
 *****************************/
-int bme280_init(void)
+int bme280_init(const char *spi_dev)
 {
     int ret;
-    init_flag = 0;
+    
+    if(init_flag)
+        return -1;
 
     /* spi init */
-    ret = spi_init();
+    ret = spi_init(spi_dev);
     if(ret == -1)
     {
         printf("spi init err\n");

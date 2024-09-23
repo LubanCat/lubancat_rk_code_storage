@@ -22,10 +22,11 @@
 #include <math.h>
 
 #include "oled.h"
-#include "infrared.h"
+#include "hcsr501.h"
 #include "pwm.h"
 #include "ads1115.h"
 #include "bme280.h"
+#include "config.h"
 
 #define SG90_PWM_CHIP           "pwmchip1"
 #define SG90_PWM_CHANNEL        "0"
@@ -35,20 +36,20 @@ static int fd_key;
 
 static void sigint_handler(int sig_num) 
 {    
-    /* pwm exit */
+    /* sg90舵机复位 */
     pwm_config(sg90, "duty_cycle", "500000");
     pwm_exit(sg90);
 
-    /* bme280 exit */
+    /* bme280反初始化 */
     bme280_exit();
 
-    /* infrared exit */
-    infrared_exit();
+    /* 人体红外模块反初始化 */
+    hcsr501_exit();
 
-    /* ads1115 exit */
+    /* ads1115反初始化 */
     ads1115_exit();
 
-    /* oled off */
+    /* oled清屏 */
     oled_clear();
 
     /* close key */
@@ -104,8 +105,8 @@ int main(int argc, char **argv)
     int	flags;
     int oled_start_x = 0;
 
-    int infrared = 0;
-    int infrared_old = 1;
+    int hcsr501 = 0;
+    int hcsr501_old = 1;
 
     double ads1115_vol = 0;
 
@@ -115,12 +116,40 @@ int main(int argc, char **argv)
     float bmp280_pres = 0;
     char bmp280_pres_str[20];
 
+    /* 配置文件路径 */
+    const char *filename = "../configuration.json";
+
     /* register exit signal ( Ctrl + c ) */
     signal(SIGINT, sigint_handler);
 
-    /* SG90 init */
-    snprintf(sg90.pwmchip, sizeof(sg90.pwmchip), "%s", SG90_PWM_CHIP);
-    snprintf(sg90.channel, sizeof(sg90.channel), "%s", SG90_PWM_CHANNEL);
+    /* 配置文件初始化 */
+    ret = config_init(filename);
+    if(ret == -1)
+    {
+        printf("config init err!\n");
+        return -1;
+    }
+
+    /* oled初始化 */
+    cJSON *oled_bus = config_get_value("oled", "bus");
+    if(oled_bus == NULL)
+        return -1;
+    ret = oled_init(oled_bus->valueint);
+    if(ret == -1)
+    {
+        printf("oled init err!\n");
+        return -1;
+    }
+
+    /* SG90舵机初始化 */
+    char sg90pwm[10];
+    cJSON *sg90_pwm = config_get_value("sg90", "pwm_chip");
+    if(sg90_pwm == NULL)
+        return -1;
+
+    sprintf(sg90pwm, "pwmchip%d", sg90_pwm->valueint);
+    snprintf(sg90.pwmchip, sizeof(sg90.pwmchip), "%s", sg90pwm);
+    snprintf(sg90.channel, sizeof(sg90.channel), "%s", "0");
     ret = pwm_init(sg90);
     if(ret == -1)
     {
@@ -132,39 +161,55 @@ int main(int argc, char **argv)
     pwm_config(sg90, "duty_cycle", "500000");               // 0.5ms 0度
     pwm_config(sg90, "enable", "1");
 
-    /* bme280 init */
-    ret = bme280_init();
+    /* bme280初始化 */
+    char bmp280spi[20];
+    cJSON *bmp280_spi = config_get_value("bmp280", "bus");
+    if(bmp280_spi == NULL)
+        return -1;
+
+    sprintf(bmp280spi, "/dev/spidev%d.0", bmp280_spi->valueint);
+    ret = bme280_init(bmp280spi);
     if(ret == -1)
     {
         printf("bme280 init err!\n");
         return -1;
     }
 
-    /* ADS1115 init */
-    ads1115_init();
+    /* ADS1115初始化 */
+    cJSON *ads1115_bus = config_get_value("ads1115", "bus");
+    if(ads1115_bus == NULL)
+        return -1;
+    ret = ads1115_init(ads1115_bus->valueint);
+    if(ret == -1)
+    {
+        printf("ads1115 init err!\n");
+        return -1;
+    }
 
-    /* key init */			
-    fd_key = open("/dev/input/event7", O_RDWR | O_NONBLOCK);    // 打开按键input设备节点
-    if (fd_key < 0)
+    /* 按键初始化 */			
+    cJSON *key_event = config_get_value("key", "event");
+    if(key_event == NULL)
+        return -1;
+    fd_key = open(key_event->valuestring, O_RDWR | O_NONBLOCK);     // 打开按键input设备节点
+    if(fd_key < 0)
     {
         printf("can not open /dev/input/event7\n");
         return -1;
     }
-    signal(SIGIO, sigio_key_func);                          // 注册信号函数
+    signal(SIGIO, sigio_key_func);                                  // 注册信号函数
     fcntl(fd_key, F_SETOWN, getpid());                          
     flags = fcntl(fd_key, F_GETFL);                     
-	fcntl(fd_key, F_SETFL, flags | FASYNC);                     // 使能异步通知模式
+	fcntl(fd_key, F_SETFL, flags | FASYNC);                         // 使能异步通知模式
 
-    /* infrared init */
-    infrared_init();
-
-    /* oled init */
-    ret = oled_init();
-    if(ret == -1)
-    {
-        printf("oled init err!\n");
+    /* 人体红外模块初始化 */
+    cJSON *hcsr501_pin_chip, *hcsr501_pin_num;
+    char hcsr501_chip[20];
+    hcsr501_pin_chip = config_get_value("hcsr501", "dout_chip");
+    hcsr501_pin_num = config_get_value("hcsr501", "dout_pin");
+    if(hcsr501_pin_chip == NULL || hcsr501_pin_num == NULL)
         return -1;
-    }
+    sprintf(hcsr501_chip, "/dev/gpiochip%s", hcsr501_pin_chip->valuestring);
+    hcsr501_init(hcsr501_chip, hcsr501_pin_num->valueint);
 
     while(1)
     {
@@ -177,10 +222,10 @@ int main(int argc, char **argv)
         bmp280_pres = bme280_get_pres();
         
         /* 人体红外感应，当当前值不同于上次值时才刷新屏幕 */
-        infrared = infrared_get_value();
-        if(infrared != infrared_old)                    
+        hcsr501 = hcsr501_get_value();
+        if(hcsr501 != hcsr501_old)                    
         {
-            if(infrared)
+            if(hcsr501)
             {
                 oled_start_x = (128*0.5)-(4*16*0.5);
                 oled_show_chinese(oled_start_x+16*0, 0, 0);  // 欢
@@ -194,7 +239,7 @@ int main(int argc, char **argv)
                 oled_clear_page(1);
             }
 
-            infrared_old = infrared;
+            hcsr501_old = hcsr501;
         }   
 
         /* oled刷新ppm值 */

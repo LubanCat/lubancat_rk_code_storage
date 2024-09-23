@@ -34,7 +34,7 @@
 // Config Register configuration
 // 开始单次转换 | 单端输入 0 | 增益 ± 4.096v | 单次触发
 #define CONFIG_REG_H                                    (ADS1115_REG_CONFIG_OS_START|\
-                                                        ADS1115_REG_CONFIG_MUX_SINGLE_1|\
+                                                        ADS1115_REG_CONFIG_MUX_SINGLE_0|\
                                                         ADS1115_REG_CONFIG_PGA_6|\
                                                         ADS1115_REG_CONFIG_MODE_SINGLE)
 // 转换速率128 SPS | 传统比较器 | 比较器极性为低电平有效 | 非锁存比较器 | 禁用比较器，并将ALERT/RDY引脚设置为高阻抗
@@ -92,7 +92,7 @@
 #define ADS1115_REG_CONFIG_COMP_QUE_DIS                 (0x3U << 0)     // 禁用比较器，并将ALERT/RDY引脚设置为高阻抗
 
 double ads1115_read_vol(void);
-int ads1115_init(void);
+int ads1115_init(unsigned int i2c_bus);
 void ads1115_exit(void);
 
 #endif

@@ -78,7 +78,7 @@ struct bme280_parameter{
     int t_fine;
 };
 
-int bme280_init(void);
+int bme280_init(const char *spi_dev);
 void bme280_exit(void);
 float bme280_get_temp(void);
 float bme280_get_pres(void);

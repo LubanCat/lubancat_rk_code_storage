@@ -34,6 +34,9 @@ double ads1115_read_vol(void)
     double vol = 0;
     double vol_range = 0;
 
+    if(file < 0)
+        return -1;
+
     // 因为配置的是单次触发，所以读数据前需要触发单次转换
     ads1115_config();
     usleep(100000);
@@ -79,6 +82,8 @@ double ads1115_read_vol(void)
     else 
         vol = ((double)ad_val / 32768.0) * vol_range;               // 正常部分的处理  
     
+    //printf("ads1115 read vol : %.5f\n", vol);
+
     return vol;
 }
 
@@ -87,9 +92,9 @@ double ads1115_read_vol(void)
  * @param : none
  * @return: 0初始化成功 -1初始化失败
 *****************************/
-int ads1115_init(void)
+int ads1115_init(unsigned int i2c_bus)
 {
-    file = open_i2c_dev(ADS1115_I2C_BUS, filename, sizeof(filename), 0);
+    file = open_i2c_dev(i2c_bus, filename, sizeof(filename), 0);
 	if (file < 0)
 	{
 		printf("can't open %s\n", filename);
@@ -112,4 +117,6 @@ void ads1115_exit(void)
 {
     if(file >= 0)
         close(file);
+
+    file = -1;
 }

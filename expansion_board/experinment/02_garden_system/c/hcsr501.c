@@ -1,43 +1,49 @@
 /*
 *
-*   file: infrared.c
+*   file: hcsr501.c
 *   update: 2024-08-14
 *   function: 
 *   
 */
 
-#include "infrared.h"
+#include "hcsr501.h"
+
+struct gpiod_chip *hcsr501_gpiochip;        
+struct gpiod_line *hcsr501_line; 
 
 /*****************************
  * @brief : 人体红外模块初始化
  * @param : none
  * @return: none
 *****************************/
-int infrared_init(void)
+int hcsr501_init(const char *gpiochip, unsigned int gpionum)
 {
     int ret = 0;
 
+    if(gpiochip == NULL)
+        return -1;
+
     /* get gpio controller */
-    infrared_gpiochip = gpiod_chip_open(GPIOCHIP_DEV);  
-    if(infrared_gpiochip == NULL)
+    hcsr501_gpiochip = gpiod_chip_open(gpiochip);  
+    if(hcsr501_gpiochip == NULL)
     {
         printf("gpiod_chip_open error\n");
         return -1;
     }
 
     /* get gpio line */
-    infrared_line = gpiod_chip_get_line(infrared_gpiochip, GPIONUM_INFRARED);
-    if(infrared_line == NULL)
+    hcsr501_line = gpiod_chip_get_line(hcsr501_gpiochip, gpionum);
+    if(hcsr501_line == NULL)
     {
         printf("gpiod_chip_get_line error : 0\n");
         return -1;
     }
 
     /* set the line direction to input mode */
-    ret = gpiod_line_request_input(infrared_line, "infrared_line");   
+    ret = gpiod_line_request_input(hcsr501_line, "hcsr501_line");   
     if(ret < 0)
     {
-        printf("gpiod_line_request_input error : infrared_line\n");
+        printf("gpiod_line_request_input error : hcsr501_line\n");
         return -1;
     }
 
@@ -49,9 +55,12 @@ int infrared_init(void)
  * @param : none
  * @return: 1检测到人体 0未检测到人体
 *****************************/
-int infrared_get_value(void)
-{
-    return gpiod_line_get_value(infrared_line);
+int hcsr501_get_value(void)
+{   
+    if(hcsr501_line == NULL)
+        return -1;
+
+    return gpiod_line_get_value(hcsr501_line);
 }
 
 /*****************************
@@ -59,9 +68,12 @@ int infrared_get_value(void)
  * @param : none
  * @return: none
 *****************************/
-void infrared_exit(void)
-{
+void hcsr501_exit(void)
+{   
+    if(hcsr501_line == NULL || hcsr501_gpiochip == NULL)
+        return;
+
     /* release line */
-    gpiod_line_release(infrared_line);
-    gpiod_chip_close(infrared_gpiochip);
+    gpiod_line_release(hcsr501_line);
+    gpiod_chip_close(hcsr501_gpiochip);
 }
