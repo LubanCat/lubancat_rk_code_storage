@@ -128,4 +128,6 @@ void hc_sr04_exit()
 
     gpiod_chip_close(gpiochip_trig);
     gpiod_chip_close(gpiochip_echo);
+
+    init_flag = 0;
 }

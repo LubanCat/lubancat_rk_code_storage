@@ -22,24 +22,9 @@ import evdev
 
 from gps import GPS
 from mpu6050 import MPU6050
+from config import ConfigManager
 
-# OLED初始化
-i2c_oled = busio.I2C(board.I2C3_SCL, board.I2C3_SDA)
-disp = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c_oled)
-
-width = disp.width  
-height = disp.height  
-image = Image.new('1', (width, height))  
-draw = ImageDraw.Draw(image)
-draw.rectangle((0, 0, width, height), outline=0, fill=0)
-
-fontSize = 16
-font = ImageFont.truetype("NotoSerifCJKhk-VF.ttf", fontSize, encoding="unic")  
-x = 0   
-top = 0
-###################################################################
-
-# Menu
+# Menu菜单框架
 class MenuInfo:
     def __init__(self, name, nextMenuItem, action):
         self.name = name
@@ -168,10 +153,51 @@ class MenuItem:
 
 ###################################################################
 
+# 通过配置文件获取外设信息
+config_file = '../configuration.json' 
+config_manager = ConfigManager(config_file)  
+if config_manager.inspect_current_environment() is not True:  
+    exit()
+
+# oled初始化
+oled_config = config_manager.get_board_config("oled")           # 从配置文件中获取oled相关配置信息 
+if oled_config is None:  
+    print("can not find 'oled' key in ", config_file)
+    exit()
+
+bus_number = oled_config['bus']                                 # 获取i2c总线编号
+scl_name = f"I2C{bus_number}_SCL"  
+sda_name = f"I2C{bus_number}_SDA"
+
+try:                                                    
+    scl_pin = getattr(board, scl_name)  
+    sda_pin = getattr(board, sda_name)  
+except AttributeError:  
+    raise ValueError(f"Unsupported I2C bus number: {bus_number}, no pins found for SCL ({scl_name}) or SDA ({sda_name})")
+
+i2c_oled = busio.I2C(scl_pin, sda_pin)
+disp = adafruit_ssd1306.SSD1306_I2C(128, 64, i2c_oled)
+
+width = disp.width  
+height = disp.height  
+image = Image.new('1', (width, height))  
+draw = ImageDraw.Draw(image)
+draw.rectangle((0, 0, width, height), outline=0, fill=0)
+
+font = ImageFont.truetype("NotoSerifCJKhk-VF.ttf", 16, encoding="unic")  
+x = 0   
+top = 0  
+#-----------------------------------------------------------------
+
 # EC11初始化
-ec11_SW_event = '/dev/input/event6'
-ec11_A_event  = '/dev/input/event5'
-ec11_B_event  = '/dev/input/event3'
+ec11_config = config_manager.get_board_config("ec11")           # 从配置文件中获取ec11相关配置信息 
+if ec11_config is None:  
+    print("can not find 'ec11' key in ", config_file)
+    exit()
+
+ec11_SW_event = ec11_config['sw-event']
+ec11_A_event  = ec11_config['a-event']
+ec11_B_event  = ec11_config['b-event']
 
 ec11_SW_value = 0
 ec11_A_value  = 1
@@ -237,8 +263,6 @@ ec11_B_thread.start()
 ###################################################################
 
 # 板载按键初始化
-key2_event = '/dev/input/event7'
-
 def key2_scan(device):
     global ec11_direction
     for event in device.read_loop():
@@ -246,18 +270,30 @@ def key2_scan(device):
             with ec11Lock:
                 ec11_direction = 7
 
-key2_device = evdev.InputDevice(key2_event)
+key_config = config_manager.get_board_config("key")             # 从配置文件中获取按键相关配置信息 
+if key_config is None:  
+    print("can not find 'key' key in ", config_file)
+    exit()
+
+key_event = key_config['event']                                 # 获取按键的输入事件
+
+key2_device = evdev.InputDevice(key_event)
 key2_thread = threading.Thread(target=key2_scan, args=(key2_device,))
 key2_thread.daemon = True
 key2_thread.start()
 ###################################################################
 
 # 超声波初始化
-gpionum_trig = 17
-gpionum_echo = 14
+hcsr04_config = config_manager.get_board_config("hcsr04")       # 从配置文件中获取超声波模块相关配置信息 
+if hcsr04_config is None:  
+    print("can not find 'hcsr04' key in ", config_file)
+    exit()
 
-gpiochip_num_trig = "3"
-gpiochip_num_echo = "3"
+gpionum_trig = hcsr04_config['trig_pin_num']
+gpionum_echo = hcsr04_config['echo_pin_num']
+
+gpiochip_num_trig = hcsr04_config['trig_pin_chip']
+gpiochip_num_echo = hcsr04_config['echo_pin_chip']
 
 gpiochip_trig = gpiod.Chip(gpiochip_num_trig, gpiod.Chip.OPEN_BY_NUMBER)
 gpiochip_echo = gpiod.Chip(gpiochip_num_echo, gpiod.Chip.OPEN_BY_NUMBER)
@@ -332,7 +368,22 @@ def ultrasonicInfoFun():
 ###################################################################
 
 # MPU6050初始化
-i2c = busio.I2C(board.I2C5_SCL, board.I2C5_SDA)
+mpu6050_config = config_manager.get_board_config("mpu6050")     # 从配置文件中获取mpu6050相关配置信息 
+if mpu6050_config is None:  
+    print("can not find 'mpu6050' key in ", config_file)
+    exit()
+
+bus_number = mpu6050_config['bus']                              # 获取i2c总线编号
+scl_name = f"I2C{bus_number}_SCL"  
+sda_name = f"I2C{bus_number}_SDA"
+
+try:                                                    
+    scl_pin = getattr(board, scl_name)  
+    sda_pin = getattr(board, sda_name)  
+except AttributeError:  
+    raise ValueError(f"Unsupported I2C bus number: {bus_number}, no pins found for SCL ({scl_name}) or SDA ({sda_name})")
+
+i2c = busio.I2C(scl_pin, sda_pin)
 mpu6050 = MPU6050(i2c)
 mpu6050.start()
 
@@ -416,7 +467,12 @@ def mpu6050GyroInfoFun():
 ###################################################################
 
 # GPS初始化
-gps_uart_dev = "/dev/ttyS3"
+gps_config = config_manager.get_board_config("atgm332d")        # 从配置文件中获取gps atgm332d相关配置信息 
+if gps_config is None:  
+    print("can not find 'atgm332d' key in ", config_file)
+    exit()
+
+gps_uart_dev = gps_config['tty-dev']
 gps = GPS(gps_uart_dev, 9600)
 
 def gpsPosInfoFun():
@@ -474,7 +530,7 @@ def gpsTimeInfoFun():
 
     titleStr = "北京时间"
 
-    oldbjtime = ""
+    oldbjtime = "Nil-Nil-Nil,Nil:Nil"
 
     while True:
         
@@ -486,7 +542,7 @@ def gpsTimeInfoFun():
             time.sleep(0.1)
             continue
         
-        if (bjtime.split(','))[0] == "Nil-Nil-Nil":
+        if bjtime == "":
             bjtime = oldbjtime
         else:
             oldbjtime = bjtime
@@ -559,9 +615,9 @@ def main():
             
             if ec11_direction == 0:  
                 pass
-            elif ec11_direction == 1:                           # 左转，切换上一项
+            elif ec11_direction == 1:                           # ec11左旋转，切换上一项
                 menuHost.goNextMenuInfo()
-            elif ec11_direction == 2:                           # 右转，切换下一项
+            elif ec11_direction == 2:                           # ec11右旋转，切换下一项
                 menuHost.goPreMenuInfo()
             elif ec11_direction == 7:                           # 板载key2按下，返回上一级菜单
                 menuHost = menuHost.goPreMenuItem()
@@ -582,7 +638,7 @@ def main():
         gps.close()
         mpu6050.close()
 
-        # disp clear
+        # oled清屏
         disp.fill(0)
         disp.show() 
 

@@ -19,7 +19,10 @@ static char filename[20];
 *****************************/
 static void oled_write_command(uint8_t cmd)
 {
-    i2c_smbus_write_byte_data(file, 0x00, cmd);
+    if(file > 0)
+        i2c_smbus_write_byte_data(file, 0x00, cmd);
+    else
+        return;
 }
 
 /*****************************
@@ -29,7 +32,10 @@ static void oled_write_command(uint8_t cmd)
 *****************************/
 static void oled_write_data(uint8_t data)
 {
-    i2c_smbus_write_byte_data(file, 0x40, data);
+    if(file > 0)
+        i2c_smbus_write_byte_data(file, 0x40, data);
+    else
+        return;
 }
 
 /*****************************
@@ -43,54 +49,6 @@ static void oled_set_pos(uint8_t x, uint8_t y)
     oled_write_command(0xb0+y);				    
 	oled_write_command((x&0x0f));  				
 	oled_write_command(((x&0xf0)>>4)|0x10);		
-}
-
-/*****************************
- * @brief : 在固定位置显示镂空矩形
- * @param : line 边框宽度
- * @return: none
-*****************************/
-void oled_show_fix_outlined_rectangle(uint8_t line)
-{
-    int i = 0, j = 0;
-    unsigned char upbits = 0, downbits = 0, temp;
-
-    if(line < 0 || line > 8)
-        return;
-    
-    for(i = 0; i < line; i++)
-    {
-        temp = 0x80 >> i;
-        downbits |= temp;
-    }
-
-    /* 画上下两条边 */
-    upbits = (1 << line) - 1;
-    oled_set_pos(0, 0);
-    for(i = 0; i < 128; i++)
-        oled_write_data(upbits);
-    
-    oled_set_pos(0, 7);
-    for(i = 0; i < 128; i++)
-        oled_write_data(downbits);
-
-    /* 画左右两条边 */
-    for(i = 0; i <= 7; i++)
-    {
-        oled_set_pos(0, i);
-        for(j = 0; j < line; j++)
-        {
-            oled_write_data(0xff);
-        }
-    }
-    for(i = 0; i <= 7; i++)
-    {
-        oled_set_pos(128-line, i);
-        for(j = 0; j < line; j++)
-        {
-            oled_write_data(0xff);
-        }
-    }
 }
 
 /*****************************
@@ -221,10 +179,10 @@ void oled_clear_page(int page)
 
 /*****************************
  * @brief : oled初始化
- * @param : none
- * @return: none
+ * @param : i2c_bus i2c总线编号
+ * @return: 0成功 -1失败
 *****************************/
-int oled_init(uint8_t i2c_bus)
+int oled_init(int i2c_bus)
 {
     file = open_i2c_dev(i2c_bus, filename, sizeof(filename), 0);
 	if (file < 0)
@@ -290,4 +248,6 @@ int oled_init(uint8_t i2c_bus)
     oled_write_command(0xAF);
 
     oled_clear();                //清屏
+
+    return 0;
 }

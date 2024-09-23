@@ -20,7 +20,7 @@ class GPS:
 
     def read(self):
         lat = lon = 0
-        bj_time = "Nil-Nil-Nil,Nil:Nil"
+        bj_time = ""
 
         while True:
 

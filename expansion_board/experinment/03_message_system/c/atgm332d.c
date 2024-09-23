@@ -206,30 +206,6 @@ static int atgm332d_parse_raw_data()
 }
 
 /*****************************
- * @brief : atgm332d初始化
- * @param : com 设备dev
- * @return: 0成功 -1失败
-*****************************/
-int atgm332d_init(unsigned char *uart_dev)
-{
-    int ret;
-
-    fd_atgm332d = open_port(uart_dev);
-	if(fd_atgm332d < 0)
-	{
-		printf("open %s err!\n", uart_dev);
-		return -1;
-	}
-
-    ret = set_opt(fd_atgm332d, 9600, 8, 'N', 1);
-	if (ret)
-	{
-		printf("set port err!\n");
-		return -1;
-	}
-}
-
-/*****************************
  * @brief : atgm332d线程函数
  * @param : arg 函数参数
  * @return: none
@@ -251,6 +227,32 @@ static void *atgm332d_thread_read(void *arg)
 
     printf("atgm332d_thread has been stopped.\n");  
     pthread_exit(NULL);
+}
+
+/*****************************
+ * @brief : atgm332d初始化
+ * @param : com 设备dev
+ * @return: 0成功 -1失败
+*****************************/
+int atgm332d_init(unsigned char *uart_dev)
+{
+    int ret;
+
+    fd_atgm332d = open_port(uart_dev);
+	if(fd_atgm332d < 0)
+	{
+		printf("open %s err!\n", uart_dev);
+		return -1;
+	}
+
+    ret = set_opt(fd_atgm332d, 9600, 8, 'N', 1);
+	if (ret)
+	{
+		printf("set port err!\n");
+		return -1;
+	}
+
+	return 0;
 }
 
 /*****************************

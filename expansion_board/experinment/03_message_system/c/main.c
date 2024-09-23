@@ -30,22 +30,7 @@
 #include "key.h"
 #include "mpu6050.h"
 #include "atgm332d.h"
-
-#define MPU6050_I2C_BUS         (5)
-#define OLED_I2C_BUS            (3)
-
-#define ATGM332D_DEV            "/dev/ttyS3"
-
-#define KEY_EVENT               "/dev/input/event7"     
-
-#define EC11_SW_EVENT           "/dev/input/event6"  
-#define EC11_A_EVENT            "/dev/input/event5"  
-#define EC11_B_EVENT            "/dev/input/event3"  
-
-#define GPIOCHIP_TRIG           "/dev/gpiochip3"
-#define GPIOCHIP_ECHO           "/dev/gpiochip3"
-#define GPIONUM_TRIC            (17)
-#define GPIONUM_ECHO            (14)
+#include "config.h"
 
 menu_t *menu_Host;
 
@@ -461,19 +446,39 @@ int main(int argc, char **argv)
     int ret = 0;
     int input_value = 0;
 
+    /* 配置文件路径 */
+    const char *filename = "../configuration.json";
+
     /* register exit signal ( Ctrl + c ) */
     signal(SIGINT, sigint_handler);
 
-    /* 1、创建菜单目录 */
-    ret = create_menu();
+    /* 配置文件初始化 */
+    ret = config_init(filename);
     if(ret == -1)
     {
-        fprintf(stderr, "create_menu err\n");
+        printf("config init err!\n");
         return -1;
     }
 
-    /* 2、ec11旋转编码器初始化 */
-    ret |= ec11_init(EC11_SW_EVENT, EC11_A_EVENT, EC11_B_EVENT);
+    /* oled初始化 */
+    cJSON *oled_bus = config_get_value("oled", "bus");
+    if(oled_bus == NULL)
+        return -1;
+    ret = oled_init(oled_bus->valueint);
+    if(ret == -1)
+    {
+        printf("oled init err!\n");
+        return -1;
+    }
+
+    /* ec11旋转编码器初始化 */
+    cJSON *ec11_sw_event = config_get_value("ec11", "sw-event");
+    cJSON *ec11_a_event = config_get_value("ec11", "a-event");
+    cJSON *ec11_b_event = config_get_value("ec11", "b-event");
+    if(ec11_sw_event == NULL || ec11_a_event == NULL || ec11_b_event == NULL)
+        return -1;
+    
+    ret |= ec11_init(ec11_sw_event->valuestring, ec11_a_event->valuestring, ec11_b_event->valuestring);
     ret |= ec11_thread_start();
     if(ret != 0)
     {
@@ -481,41 +486,67 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    /* 3、板载按键初始化 */
-    ret = key_init(KEY_EVENT);
+    /* 板载按键初始化 */
+    cJSON *key_event = config_get_value("key", "event");
+    if(key_event == NULL)
+        return -1;
+    ret = key_init(key_event->valuestring);
     if(ret == -1)
     {
-        fprintf(stderr, "key_init err\n");
+        fprintf(stderr, "key init err\n");
         return -1;
     }
 
-    /* 3、超声波初始化 */
-    ret = hc_sr04_init(GPIOCHIP_TRIG, GPIONUM_TRIC, GPIOCHIP_ECHO, GPIONUM_ECHO);
-    if(ret == -1)
-    {
-        fprintf(stderr, "hc_sr04_init err\n");
+    /* 超声波初始化 */
+    cJSON *trig_pin_chip = config_get_value("hcsr04", "trig_pin_chip");
+    cJSON *echo_pin_chip = config_get_value("hcsr04", "echo_pin_chip");
+    cJSON *trig_pin_num = config_get_value("hcsr04", "trig_pin_num");
+    cJSON *echo_pin_num = config_get_value("hcsr04", "echo_pin_num");
+
+    if(trig_pin_chip == NULL || echo_pin_chip == NULL || trig_pin_num == NULL || echo_pin_num == NULL)
         return -1;
-    }
-    
-    /* 3、mpu6050初始化 */
-    ret = mpu6050_init(MPU6050_I2C_BUS);
+
+    char trig[20], echo[20];
+    sprintf(trig, "/dev/gpiochip%s", trig_pin_chip->valuestring);
+    sprintf(echo, "/dev/gpiochip%s", echo_pin_chip->valuestring);
+
+    ret = hc_sr04_init(trig, trig_pin_num->valueint, echo, echo_pin_num->valueint);
     if(ret == -1)
     {
-        fprintf(stderr, "mpu6050_init err\n");
+        fprintf(stderr, "hc_sr04 init err\n");
         return -1;
     }
 
-    /* 3、atgm332d初始化 */
-    ret |= atgm332d_init(ATGM332D_DEV);
+    /* mpu6050初始化 */
+    cJSON *mpu6050_bus = config_get_value("mpu6050", "bus");
+    if(mpu6050_bus == NULL)
+        return -1;
+    ret = mpu6050_init(mpu6050_bus->valueint);
+    if(ret == -1)
+    {
+        fprintf(stderr, "mpu6050 init err\n");
+        return -1;
+    }
+
+    /* atgm332d初始化 */
+    cJSON *atgm332d_uart = config_get_value("atgm332d", "tty-dev");
+    if(atgm332d_uart == NULL)
+        return -1;
+    ret |= atgm332d_init(atgm332d_uart->valuestring);
     ret |= atgm332d_thread_start();
     if(ret != 0)
     {
-        fprintf(stderr, "atgm332d_init init err\n");
+        fprintf(stderr, "atgm332d init err\n");
         return -1;
     }
 
-    /* 3、oled初始化 */
-    oled_init(OLED_I2C_BUS);
+    /* 创建菜单目录 */
+    ret = create_menu();
+    if(ret == -1)
+    {
+        fprintf(stderr, "create menu err\n");
+        return -1;
+    }
     display_menu();
 
     while(1)

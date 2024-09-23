@@ -1,0 +1,45 @@
+{  
+    "info" : {
+        "name" : "message_system"
+    },
+
+    "LubanCat-1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "atgm332d": {  
+            "interface": "uart",  
+            "tty-dev": "/dev/ttyS3"    
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event3"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "3",
+            "trig_pin_num": 17,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        }
+    }
+
+}
