@@ -8,27 +8,27 @@
 
 #include "motor.h"
 
-struct gpiod_chip *STBY_gpiochip;
-struct gpiod_chip *AIN1_gpiochip;   
-struct gpiod_chip *AIN2_gpiochip;
-struct gpiod_chip *BIN1_gpiochip;
-struct gpiod_chip *BIN2_gpiochip;     
+static struct gpiod_chip *STBY_gpiochip;
+static struct gpiod_chip *AIN1_gpiochip;   
+static struct gpiod_chip *AIN2_gpiochip;
+static struct gpiod_chip *BIN1_gpiochip;
+static struct gpiod_chip *BIN2_gpiochip;     
 
-struct gpiod_line *STBY_line;
-struct gpiod_line *AIN1_line;   
-struct gpiod_line *AIN2_line;
-struct gpiod_line *BIN1_line;
-struct gpiod_line *BIN2_line;
+static struct gpiod_line *STBY_line;
+static struct gpiod_line *AIN1_line;   
+static struct gpiod_line *AIN2_line;
+static struct gpiod_line *BIN1_line;
+static struct gpiod_line *BIN2_line;
 
-pwm pwma, pwmb;
-
-int init_flag = 0;
+static pwm pwma, pwmb;
+ 
+static int init_flag = 0;
 
 /*****************************
  * @brief : pwm属性配置
  * @param : pwmx, pwm结构体
  * @param : attr, pwm属性
- * @param : val,  pwm属性所要设置的值
+ * @param : val,  pwm属性所要设置的值，如：polarity、period、duty_cycle、enable
  * @return: -1配置失败 0配置成功
 *****************************/
 static int pwm_config(pwm pwmx, const char *attr, const char *val)
@@ -154,8 +154,18 @@ static int pwm_exit(pwm pwmx)
 
 /*****************************
  * @brief : 电机驱动板初始化
- * @param : AIN1 AIN2, 通道A正反转设置（AIN1=0 AIN2=1 正转）（AIN1=1 AIN2=0 反转）
- * @param : BIN1 BIN2, 通道B正反转设置（BIN1=0 BIN2=1 正转）（BIN1=1 BIN2=0 反转）
+ * @param : stby_gpiochip，stby引脚gpiochip，如 "/dev/gpiochip1"
+ * @param : ain1_gpiochip，ain1引脚gpiochip，如 "/dev/gpiochip1"
+ * @param : ain2_gpiochip，ain2引脚gpiochip，如 "/dev/gpiochip1"
+ * @param : bin1_gpiochip，bin1引脚gpiochip，如 "/dev/gpiochip1"
+ * @param : bin2_gpiochip，bin2引脚gpiochip，如 "/dev/gpiochip1"
+ * @param : stby_gpionum，stby引脚gpionum
+ * @param : ain1_gpionum，ain1引脚gpionum
+ * @param : ain2_gpionum，ain2引脚gpionum
+ * @param : bin1_gpionum，bin1引脚gpionum
+ * @param : bin2_gpionum，bin2引脚gpionum
+ * @param : pwm_a，pwm0 pwmchip，如"pwmchip1"
+ * @param : pwm_b，pwm1 pwmchip，如"pwmchip1"
  * @return: -1初始化失败 0初始化成功
 *****************************/
 int motor_init(const char *stby_gpiochip, const char *ain1_gpiochip, const char *ain2_gpiochip, const char *bin1_gpiochip, const char *bin2_gpiochip, 
@@ -365,7 +375,7 @@ void motor_off(void)
 
 /*****************************
  * @brief : 电机驱动板通道A正反转设置
- * @param : val1=0 val=1 or val1=1 val1=0
+ * @param : val1=0 val2=1 or val1=1 val2=0
  * @return: none
 *****************************/
 void motor_channelA_direction_set(uint8_t val1, uint8_t val2)
@@ -382,7 +392,7 @@ void motor_channelA_direction_set(uint8_t val1, uint8_t val2)
 
 /*****************************
  * @brief : 电机驱动板通道B正反转设置
- * @param : val1=0 val=1 or val1=1 val1=0
+ * @param : val1=0 val2=1 or val1=1 val2=0
  * @return: none
 *****************************/
 void motor_channelB_direction_set(uint8_t val1, uint8_t val2)
@@ -399,7 +409,7 @@ void motor_channelB_direction_set(uint8_t val1, uint8_t val2)
 
 /*****************************
  * @brief : 电机驱动板PWMA属性设置
- * @param : attr, pwm属性
+ * @param : attr, pwm属性，如：polarity、period、duty_cycle、enable
  * @param : val,  pwm属性所要设置的值
  * @return: -1配置失败 0配置成功
 *****************************/
@@ -413,7 +423,7 @@ int motor_pwmA_config(const char *attr, const char *val)
 
 /*****************************
  * @brief : 电机驱动板PWMB属性设置
- * @param : attr, pwm属性
+ * @param : attr, pwm属性，如：polarity、period、duty_cycle、enable
  * @param : val,  pwm属性所要设置的值
  * @return: -1配置失败 0配置成功
 *****************************/

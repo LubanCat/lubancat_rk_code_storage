@@ -8,8 +8,8 @@
 
 #include "bme280.h"
 
-struct gpiod_chip *cs_gpiochip6;        
-struct gpiod_line *cs_gpioline11;
+struct gpiod_chip *cs_gpiochip;        
+struct gpiod_line *cs_gpioline;
 
 unsigned char id;
 struct bme280_parameter bme280;
@@ -23,12 +23,15 @@ int init_flag = 0;
  * @param : none
  * @return: 0初始化成功 -1初始化失败
 *****************************/
-static int spi_init(const char *spi_dev)
+static int spi_init(const char *spi_dev, const char *cs_chip, unsigned int cs_pin)
 {
     int ret; 
     SPI_MODE mode;
     char spi_bits;
     SPI_SPEED spi_speed;
+
+    if(spi_dev == NULL || cs_chip == NULL)
+        return -1;
 
     fd_spidev = open(spi_dev, O_RDWR);
 	if (fd_spidev < 0) {
@@ -61,22 +64,22 @@ static int spi_init(const char *spi_dev)
 	}
     
     /* cs pin init */
-    cs_gpiochip6 = gpiod_chip_open("/dev/gpiochip6");
-    if(cs_gpiochip6 == NULL)
+    cs_gpiochip = gpiod_chip_open(cs_chip);
+    if(cs_gpiochip == NULL)
     {
         printf("gpiod_chip_open error\n");
         return -1;
     }
-    cs_gpioline11 = gpiod_chip_get_line(cs_gpiochip6, 11);
-    if(cs_gpioline11 == NULL)
+    cs_gpioline = gpiod_chip_get_line(cs_gpiochip, cs_pin);
+    if(cs_gpioline == NULL)
     {
         printf("gpiod_chip_get_line error\n");
         return -1;
     }
-    ret = gpiod_line_request_output(cs_gpioline11, "cs_gpioline11", 1);
+    ret = gpiod_line_request_output(cs_gpioline, "cs_gpioline", 1);
     if(ret < 0)
     {
-        printf("gpiod_line_request_output error : cs_gpioline11\n");
+        printf("gpiod_line_request_output error : cs_gpioline\n");
         return -1;
     }
 }
@@ -95,12 +98,12 @@ static void bme280_write_reg(const unsigned char reg, const unsigned char byte)
     memset(reg_buf, reg, sizeof(reg_buf));
 	memset(byte_buf, byte, sizeof(byte_buf));
 
-    gpiod_line_set_value(cs_gpioline11, 0);
+    gpiod_line_set_value(cs_gpioline, 0);
 
     write(fd_spidev, &reg_buf[0], 1);
     write(fd_spidev, &byte_buf[0], 1);
 	
-    gpiod_line_set_value(cs_gpioline11, 1);
+    gpiod_line_set_value(cs_gpioline, 1);
 }
 
 /*****************************
@@ -125,7 +128,7 @@ static unsigned char bme280_read_reg(const unsigned char reg)
 	xfer[1].rx_buf = (unsigned long)recv_buf;
 	xfer[1].len = 1;
 
-    gpiod_line_set_value(cs_gpioline11, 0);
+    gpiod_line_set_value(cs_gpioline, 0);
 
 	status = ioctl(fd_spidev, SPI_IOC_MESSAGE(2), xfer);
 	if (status < 0) {
@@ -133,7 +136,7 @@ static unsigned char bme280_read_reg(const unsigned char reg)
 		return 0;
 	}
 
-    gpiod_line_set_value(cs_gpioline11, 1);
+    gpiod_line_set_value(cs_gpioline, 1);
 
 	return recv_buf[0];
 }
@@ -308,7 +311,7 @@ static void bme280_read_humi_parameter(void)
 *****************************/
 static void bme280_remeasure(void)
 {
-    bme280_write_reg(BME280_REGISTER_CTRL_MEAS, 0x55);
+    bme280_write_reg(BME280_REGISTER_CTRL_MEAS, 0x56);
     usleep(45000);
 }
 
@@ -452,15 +455,21 @@ float bme280_get_humi(void)
  * @param : none
  * @return: 0初始化成功 -1初始化失败
 *****************************/
-int bme280_init(const char *spi_dev)
+int bme280_init(const char *spi_dev, const char *cs_chip, unsigned int cs_pin)
 {
     int ret;
     
     if(init_flag)
         return -1;
+    
+    if(cs_chip == NULL)
+    {
+        printf("cs_chip null\n");
+        return -1;
+    }
 
     /* spi init */
-    ret = spi_init(spi_dev);
+    ret = spi_init(spi_dev, cs_chip, cs_pin);
     if(ret == -1)
     {
         printf("spi init err\n");
@@ -504,8 +513,8 @@ void bme280_exit(void)
 
     close(fd_spidev);
 
-    gpiod_line_release(cs_gpioline11);
-    gpiod_chip_close(cs_gpiochip6);
+    gpiod_line_release(cs_gpioline);
+    gpiod_chip_close(cs_gpiochip);
 
     init_flag = 0;
 }

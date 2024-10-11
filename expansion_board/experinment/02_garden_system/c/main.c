@@ -162,13 +162,16 @@ int main(int argc, char **argv)
     pwm_config(sg90, "enable", "1");
 
     /* bme280初始化 */
-    char bmp280spi[20];
+    char bmp280spi[20], bmp280cschip[20];
     cJSON *bmp280_spi = config_get_value("bmp280", "bus");
-    if(bmp280_spi == NULL)
+    cJSON *cs_chip = config_get_value("bmp280", "cs_chip");
+    cJSON *cs_pin = config_get_value("bmp280", "cs_pin");
+    if(bmp280_spi == NULL || cs_chip == NULL || cs_pin == NULL)
         return -1;
 
     sprintf(bmp280spi, "/dev/spidev%d.0", bmp280_spi->valueint);
-    ret = bme280_init(bmp280spi);
+    sprintf(bmp280cschip, "/dev/gpiochip%s", cs_chip->valuestring);
+    ret = bme280_init(bmp280spi, bmp280cschip, cs_pin->valueint);
     if(ret == -1)
     {
         printf("bme280 init err!\n");

@@ -7,7 +7,7 @@
 
 #include "atgm332d.h"
 
-int fd_atgm332d;
+static int fd_atgm332d;
 static pthread_t atgm332d_thread;
 static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 

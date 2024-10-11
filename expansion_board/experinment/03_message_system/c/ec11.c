@@ -56,7 +56,7 @@ static void *ec11_scan_device(void *arg)
                     else if (ie.value == 1) 
                         ec11_A_value = 1;  
                 } 
-                else if (fd == ec11_B_fd && ie.code == 252) 
+                else if (fd == ec11_B_fd && ie.code == 251) 
                 {  
                     if (ie.value == 0 && ec11_A_value == 1)             
                     {  

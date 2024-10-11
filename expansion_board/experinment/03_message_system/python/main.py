@@ -233,7 +233,7 @@ def ec11_scan_A(device):
 def ec11_scan_B(device):
     global ec11_SW_value, ec11_A_value, ec11_B_value, ec11_direction
     for event in device.read_loop():
-        if event.code == 252:
+        if event.code == 251:
             if event.value == 0 and ec11_A_value == 1:  # 逆时针旋转
                 ec11_B_value = 0
                 if ec11_SW_value == 1:                  # 按键按下逆时针旋转

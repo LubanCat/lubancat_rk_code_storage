@@ -111,17 +111,31 @@ motor_PWMB.enable()
 #-----------------------------------------------------------------
 
 # led初始化
-gpionum_r_led = 0
-gpionum_g_led = 1
-gpiochip_led = "6"
-red_led = GPIO(gpionum_r_led, gpiochip_led, 1)                  # 初始化红色led, 初始电平为高电平，灯灭
-green_led = GPIO(gpionum_g_led, gpiochip_led, 1)                # 初始化绿色led, 初始电平为高电平，灯灭
+led_config = config_manager.get_board_config("led")             # 从配置文件中获取led相关配置信息 
+if led_config is None:  
+    print("can not find 'led' key in ", config_file)
+    exit()
+
+r_led_chip = led_config['r_pin_chip']
+g_led_chip = led_config['g_pin_chip']
+
+r_led_num = led_config['r_pin_num']
+g_led_num = led_config['g_pin_num']
+
+red_led = GPIO(r_led_num, r_led_chip, 1)                        # 初始化红色led, 初始电平为高电平，灯灭
+green_led = GPIO(g_led_num, g_led_chip, 1)                      # 初始化绿色led, 初始电平为高电平，灯灭
 #-----------------------------------------------------------------
 
 # 蜂鸣器初始化
-gpionum_buzzer = 6
-gpiochip_buzzer = "6"
-buzzer = GPIO(gpionum_buzzer, gpiochip_buzzer, 0)               # 初始化蜂鸣器, 初始电平为低电平，蜂鸣器不鸣响
+buzzer_config = config_manager.get_board_config("buzzer")       # 从配置文件中获取buzzer相关配置信息 
+if buzzer_config is None:  
+    print("can not find 'buzzer' key in ", config_file)
+    exit()
+
+buzzer_chip = buzzer_config['pin_chip']
+buzzer_num = buzzer_config['pin_num']
+
+buzzer = GPIO(buzzer_num, buzzer_chip, 0)                       # 初始化蜂鸣器, 初始电平为低电平，蜂鸣器不鸣响
 #-----------------------------------------------------------------
 
 # dht11初始化
@@ -140,7 +154,7 @@ def main():
             data = os.read(dht11_fd, 6)
             temp = float(data[2] + data[3] * 0.01)
             humi = float(data[0] + data[1] * 0.01)
-            print("temp: " + str(temp) + " humi: " + str(humi))
+            #print("temp: " + str(temp) + " humi: " + str(humi))
 
             # 环境温湿度超过阈值
             if (temp >= MAX_TEMPERATURE or humi >= MAX_HUMIDITY):   

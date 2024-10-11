@@ -20,8 +20,6 @@
 #include <stdint.h>
 #include <linux/spi/spidev.h>
 
-#define BME280_SPI_DEV                  "/dev/spidev3.0"
-
 /* BME280 REGISTER */
 #define BME280_REGISTER_ID              (0xD0)
 #define BME280_REGISTER_RESET           (0xE0)
@@ -78,7 +76,7 @@ struct bme280_parameter{
     int t_fine;
 };
 
-int bme280_init(const char *spi_dev);
+int bme280_init(const char *spi_dev, const char *cs_chip, unsigned int cs_pin);
 void bme280_exit(void);
 float bme280_get_temp(void);
 float bme280_get_pres(void);

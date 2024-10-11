@@ -43,13 +43,13 @@ static int config_get_board_name_in_dts()
     char model[256];
     char *temp;
 
-    file = fopen("/proc/device-tree/model", "r");
+    file = fopen("/proc/device-tree/compatible", "r");
     if(file) 
     {
         if(fgets(model, sizeof(model), file)) 
         {
             model[strcspn(model, "\n")] = 0;
-            temp = strstr(model, "LubanCat");
+            temp = strstr(model, "lubancat");
             if(temp)
             {
                 snprintf(board_name, sizeof(board_name), "%s", temp);
@@ -106,7 +106,7 @@ static int config_has_board()
 {
     if(global_config == NULL)
     {
-        fprintf(stderr, "[ %s ] : global_config is null, use config_load() before please!\n", __FUNCTION__);
+        fprintf(stderr, "[ %s ] : global_config is null, please ensure that the file is normal !\n", __FUNCTION__);
         return -1;
     }
 

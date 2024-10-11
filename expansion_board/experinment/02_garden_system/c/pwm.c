@@ -8,7 +8,7 @@
 
 #include "pwm.h"
 
-int flag_init = 0;
+static int flag_init = 0;
 
 /*****************************
  * @brief : pwm属性配置

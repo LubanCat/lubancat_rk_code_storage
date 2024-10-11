@@ -33,7 +33,7 @@ item_info_t *item_info_init(const char *name, menu_t *next_menu, void *func, voi
 
     /* item info init */
     /* name */
-    memcpy(item_info->name, name, strlen(name));
+    memcpy(item_info->name, name, strlen(name)+1);
     
     /* next_menu */
     item_info->next_menu = next_menu;
@@ -68,7 +68,7 @@ menu_t *menu_init(const char *title)
 
     /* menu init */
     /* title */
-    memcpy(menu->title, title, strlen(title));
+    memcpy(menu->title, title, strlen(title)+1);
     
     /* info */
     for(i = 0; i < ITEM_INFO_NUM_MAX; i++)

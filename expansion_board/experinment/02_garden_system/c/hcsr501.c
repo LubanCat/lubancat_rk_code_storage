@@ -8,8 +8,8 @@
 
 #include "hcsr501.h"
 
-struct gpiod_chip *hcsr501_gpiochip;        
-struct gpiod_line *hcsr501_line; 
+static struct gpiod_chip *hcsr501_gpiochip;        
+static struct gpiod_line *hcsr501_line; 
 
 /*****************************
  * @brief : 人体红外模块初始化

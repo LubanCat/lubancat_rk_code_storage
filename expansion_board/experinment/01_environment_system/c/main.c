@@ -19,8 +19,6 @@
 #include <stdint.h>
 #include <signal.h> 
 
-#include "led.h"
-#include "buzzer.h"
 #include "motor.h"
 #include "oled.h"
 #include "config.h"
@@ -34,16 +32,20 @@
 
 int dht11_fd;
 
+struct gpiod_chip *r_led_gpiochip, *g_led_gpiochip;
+struct gpiod_line *r_led_line, *g_led_line;
+
+struct gpiod_chip *buzzer_gpiochip;    
+struct gpiod_line *buzzer_line; 
+
 static void sigint_handler(int sig_num) 
 {    
     /* 关闭led，反初始化led */
-    led_off(LED_RED);
-    led_off(LED_GREEN);
-    led_release();
+    gpiod_line_set_value(r_led_line, 1);
+    gpiod_line_set_value(g_led_line, 1);
 
     /* 关闭蜂鸣器，反初始化蜂鸣器 */
-    buzzer_off();
-    buzzer_release();
+    gpiod_line_set_value(buzzer_line, 0);
 
     /* 关闭电机驱动板，反初始化电机驱动板 */
     motor_off();
@@ -83,20 +85,74 @@ int main(int argc, char **argv)
     }
 
     /* led初始化 */
-    ret = led_init();
-    if(ret == -1)
+    char r_pin_chip[20], g_pin_chip[20];
+
+    cJSON *rledchip = config_get_value("led", "r_pin_chip");
+    cJSON *gledchip = config_get_value("led", "g_pin_chip");
+    cJSON *rlednum = config_get_value("led", "r_pin_num");
+    cJSON *glednum = config_get_value("led", "g_pin_num");
+    if(rledchip == NULL || gledchip == NULL || rlednum == NULL || glednum == NULL)
+        return -1;
+    
+    // get gpio controller
+    sprintf(r_pin_chip, "/dev/gpiochip%s", rledchip->valuestring);
+    sprintf(g_pin_chip, "/dev/gpiochip%s", gledchip->valuestring);
+    r_led_gpiochip = gpiod_chip_open(r_pin_chip);  
+    g_led_gpiochip = gpiod_chip_open(g_pin_chip); 
+    if(r_led_gpiochip == NULL || g_led_gpiochip == NULL)
     {
-        printf("led init err!\n");
-        led_release();
+        printf("gpiod_chip_open error\n");
+        return -1;
+    }
+
+    // get gpio line
+    r_led_line = gpiod_chip_get_line(r_led_gpiochip, rlednum->valueint);
+    g_led_line = gpiod_chip_get_line(g_led_gpiochip, glednum->valueint);
+    if(r_led_line == NULL || g_led_line == NULL)
+    {
+        printf("gpiod_chip_get_line error\n");
+        return -1;
+    }
+
+    // 设置引脚为输出模式，初始电平为高电平
+    ret |= gpiod_line_request_output(r_led_line, "r_led_line", 1); 
+    ret |= gpiod_line_request_output(g_led_line, "g_led_line", 1);
+    if(ret < 0)
+    {
+        printf("led gpiod_line_request_output error\n");
         return -1;
     }
 
     /* 蜂鸣器初始化 */
-    ret = buzzer_init();
-    if(ret == -1)
+    char buzzer_pin_chip[20];
+
+    cJSON *buzzerchip = config_get_value("buzzer", "pin_chip");
+    cJSON *buzzernum = config_get_value("buzzer", "pin_num");
+    if(buzzerchip == NULL || buzzernum == NULL)
+        return -1;
+    
+    // get gpio controller 
+    sprintf(buzzer_pin_chip, "/dev/gpiochip%s", buzzerchip->valuestring);
+    buzzer_gpiochip = gpiod_chip_open(buzzer_pin_chip);  
+    if(buzzer_gpiochip == NULL)
     {
-        printf("buzzer init err!\n");
-        buzzer_release();
+        printf("gpiod_chip_open error\n");
+        return -1;
+    }
+
+    // get gpio line 
+    buzzer_line = gpiod_chip_get_line(buzzer_gpiochip, buzzernum->valueint);
+    if(buzzer_line == NULL)
+    {
+        printf("gpiod_chip_get_line error : 0\n");
+        return -1;
+    }
+
+    // 设置引脚为输出模式，初始电平为低电平
+    ret = gpiod_line_request_output(buzzer_line, "buzzer_line", 0);   
+    if(ret < 0)
+    {
+        printf("buzzer gpiod_line_request_output error\n");
         return -1;
     }
 
@@ -193,17 +249,17 @@ int main(int argc, char **argv)
         if(temp >= MAX_TEMP || humi >= MAX_HUMI)
         {
             /* 超过阈值，红色led亮，蜂鸣器工作，风扇工作 */
-            led_on(LED_RED);
-            led_off(LED_GREEN);
-            buzzer_on();
+            gpiod_line_set_value(r_led_line, 0);
+            gpiod_line_set_value(g_led_line, 1);
+            gpiod_line_set_value(buzzer_line, 1);
             motor_on();
         }
         else
         {
             /* 正常状态下，绿色led亮，蜂鸣器不工作，风扇不工作 */
-            led_on(LED_GREEN);
-            led_off(LED_RED);
-            buzzer_off();
+            gpiod_line_set_value(r_led_line, 1);
+            gpiod_line_set_value(g_led_line, 0);
+            gpiod_line_set_value(buzzer_line, 0);
             motor_off();
         }
 
