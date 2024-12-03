@@ -1,0 +1,578 @@
+{  
+    "info" : {
+        "name" : "environment-alarm-system"
+    },
+
+    "lubancat-zero": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-1": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-1n": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-2": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-2-v1": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-2-v2": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-2-v3": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-2n": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-2n-v1": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-4": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-4-v1": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-5": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+
+    },
+
+    "lubancat-5-v2": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event5"
+        },
+        
+        "led-r": {
+            "pin_chip": "6",
+            "pin_num": 0
+        },
+
+        "led-g": {
+            "pin_chip": "6",
+            "pin_num": 1
+        },
+
+        "led-b": {
+            "pin_chip": "6",
+            "pin_num": 2
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "flame": {
+            "pin_chip": "6",
+            "pin_num": 10
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+        
+    }
+
+}

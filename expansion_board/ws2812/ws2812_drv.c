@@ -60,7 +60,7 @@
 //#define DEBUG
 
 /* 根据目标芯片，打开对应宏定义 */
-//#define RK356x
+#define RK356x
 //#define RK3588
 
 #ifdef RK356x
@@ -97,10 +97,10 @@ static struct ws2812_mes {
     unsigned char color[3];     		// color[0]:color[1]:color[2]	R:G:B     
 }ws2812;
 
-static int init_flag = 0;
 static int major = 0;
 static struct class *ws2812_class;
 static int bit;
+static unsigned int temp;
 
 static int ws2812_drv_open(struct inode *node, struct file *file)
 {
@@ -109,32 +109,23 @@ static int ws2812_drv_open(struct inode *node, struct file *file)
 
 static void ws2812_reset(void)
 {
-	static unsigned int temp = 0;
-	temp |= 1 << (16 + bit);
-	
-	/* Reset: 拉低 > 280ns */
+	/* Reset: 拉低 > 280us */
 	temp &= (~(1 << bit));
 	*GPIO_LEVEL_REG = temp;
-
 	udelay(300);
 }
 
 static void ws2812_write_frame_0(void)
 {
-	static unsigned int temp = 0;
-	temp |= 1 << (16 + bit);
-
 	/* T0H：拉高 220ns ~ 380ns */
 	temp |= 1 << bit;
-	*GPIO_LEVEL_REG = temp;		/* 执行1次，约50ns */
+	*GPIO_LEVEL_REG = temp;		/* 执行1次，约xxns */
 	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;		/* 约250ns */
+	*GPIO_LEVEL_REG = temp;		
 
 	/* T0L: 拉低 580ns ~ 1.6us */
 	temp &= (~(1 << bit));
-	*GPIO_LEVEL_REG = temp;		/* 执行1次，约50ns */
+	*GPIO_LEVEL_REG = temp;		/* 执行1次，约xxns */
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
@@ -142,28 +133,13 @@ static void ws2812_write_frame_0(void)
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;		/* 约1us */
 }
 
 static void ws2812_write_frame_1(void)
 {
-	static unsigned int temp = 0;
-	temp |= 1 << (16 + bit);
-
 	/* T1H: 拉高 580ns ~ 1us */
 	temp |= 1 << bit;
-	*GPIO_LEVEL_REG = temp;		/* 执行1次，约50ns */
+	*GPIO_LEVEL_REG = temp;		/* 执行1次，约xxns */
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
@@ -171,26 +147,12 @@ static void ws2812_write_frame_1(void)
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;		/* 约1us */
 
 	/* T1L: 拉低 220ns ~ 420ns */	
 	temp &= (~(1 << bit));
-	*GPIO_LEVEL_REG = temp;		/* 执行1次，约50ns */
+	*GPIO_LEVEL_REG = temp;		/* 执行1次，约xxns */
 	*GPIO_LEVEL_REG = temp;
 	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;
-	*GPIO_LEVEL_REG = temp;		/* 250ns */
 }
 
 static void ws2812_write_byte(unsigned char byte)
@@ -212,7 +174,6 @@ static ssize_t ws2812_drv_write(struct file *filp, const char __user * buf, size
 	struct ws2812_mes ws2812_usr;
 	int step;
 	int i = 1;
-	unsigned int temp = 0;
 
 	err = copy_from_user(&ws2812_usr, buf, sizeof(ws2812_usr));
 	if(err != 0)
@@ -248,58 +209,55 @@ static ssize_t ws2812_drv_write(struct file *filp, const char __user * buf, size
 		return -1;
 	}
 
-	if(init_flag == 0)
+	/* step : 0-15使用GPIO_SWPORT_DR_L_OFFSET，16-31使用GPIO_SWPORT_DR_H_OFFSET */
+	step = ws2812_usr.gpionum / 15;
+	if(ws2812_usr.gpiochip == 0)
 	{
-		/* step : 0-15使用GPIO_SWPORT_DR_L_OFFSET，16-31使用GPIO_SWPORT_DR_H_OFFSET */
-		step = ws2812_usr.gpionum / 15;
-		if(ws2812_usr.gpiochip == 0)
-		{
-			/* 1、GPIO复用 */
-			/* 相关复用寄存器中，默认都是配置成GPIO模式，所以这里省略了GPIO的复用配置 */
-			/* 2、GPIO模式 */
-			GPIO_DIR_REG	= ioremap(GPIO0_BASE_ADDR + GPIO_SWPORT_DDR_L_OFFSET+(step*(0x4)), 4);
-			/* 3、GPIO电平 */
-			GPIO_LEVEL_REG 	= ioremap(GPIO0_BASE_ADDR + GPIO_SWPORT_DR_L_OFFSET+(step*(0x4)), 4);
-		}
-		else
-		{
-			/* 1、GPIO复用 */
-			/* 相关复用寄存器中，默认都是配置成GPIO模式，所以这里省略了GPIO的复用配置 */
-			/* 2、GPIO模式 */
-			GPIO_DIR_REG	= ioremap(GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DDR_L_OFFSET+(step*(0x4)), 4);
-			/* 3、GPIO电平 */
-			GPIO_LEVEL_REG	= ioremap(GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DR_L_OFFSET+(step*(0x4)), 4);
+		/* 1、GPIO复用 */
+		/* 相关复用寄存器中，默认都是配置成GPIO模式，所以这里省略了GPIO的复用配置 */
+		/* 2、GPIO模式 */
+		GPIO_DIR_REG	= ioremap(GPIO0_BASE_ADDR + GPIO_SWPORT_DDR_L_OFFSET+(step*(0x4)), 4);
+		/* 3、GPIO电平 */
+		GPIO_LEVEL_REG 	= ioremap(GPIO0_BASE_ADDR + GPIO_SWPORT_DR_L_OFFSET+(step*(0x4)), 4);
+	}
+	else
+	{
+		/* 1、GPIO复用 */
+		/* 相关复用寄存器中，默认都是配置成GPIO模式，所以这里省略了GPIO的复用配置 */
+		/* 2、GPIO模式 */
+		GPIO_DIR_REG	= ioremap(GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DDR_L_OFFSET+(step*(0x4)), 4);
+		/* 3、GPIO电平 */
+		GPIO_LEVEL_REG	= ioremap(GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DR_L_OFFSET+(step*(0x4)), 4);
 
 #ifdef DEBUG
-			printk("GPIO_DIR_REG : 0x%lX\n", GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DDR_L_OFFSET+(step*(0x4)));
-			printk("GPIO_LEVEL_REG : 0x%lX\n", GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DR_L_OFFSET+(step*(0x4)));
+		printk("GPIO_DIR_REG : 0x%lX\n", GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DDR_L_OFFSET+(step*(0x4)));
+		printk("GPIO_LEVEL_REG : 0x%lX\n", GPIO1_BASE_ADDR + (0x10000*(ws2812_usr.gpiochip-1)) + GPIO_SWPORT_DR_L_OFFSET+(step*(0x4)));
 #endif
-		}
-		
-		if(GPIO_LEVEL_REG == NULL || GPIO_DIR_REG == NULL)
-		{
-			printk(KERN_ERR"GPIO_LEVEL_REG or GPIO_DIR_REG is NULL\n");
-			return -1;
-		}
-
-		bit = ws2812_usr.gpionum % 16;
-
-		/* 设置GPIO复用 */
-		/* 相关复用寄存器中，默认都是配置成GPIO模式，所以这里省略了GPIO的复用配置 */
-
-		/* 设置GPIO模式为Output */
-		temp = *GPIO_DIR_REG;
-		temp |= 1 << (16 + bit);
-		temp |= 1 << bit;
-		*GPIO_DIR_REG = temp;
-
-		/* 设置GPIO初始电平为高电平 */
-		temp = *GPIO_LEVEL_REG;
-		temp |= 1 << (16 + bit);
-		temp |= 1 << bit;
-		*GPIO_LEVEL_REG = temp;
 	}
 	
+	if(GPIO_LEVEL_REG == NULL || GPIO_DIR_REG == NULL)
+	{
+		printk(KERN_ERR"GPIO_LEVEL_REG or GPIO_DIR_REG is NULL\n");
+		return -1;
+	}
+
+	bit = ws2812_usr.gpionum % 16;
+
+	/* 设置GPIO复用 */
+	/* 相关复用寄存器中，默认都是配置成GPIO模式，所以这里省略了GPIO的复用配置 */
+
+	/* 设置GPIO模式为Output */
+	temp = *GPIO_DIR_REG;
+	temp |= 1 << (16 + bit);
+	temp |= 1 << bit;
+	*GPIO_DIR_REG = temp;
+
+	/* 设置GPIO初始电平为高电平 */
+	temp = *GPIO_LEVEL_REG;
+	temp |= 1 << (16 + bit);
+	temp |= 1 << bit;
+	*GPIO_LEVEL_REG = temp;
+
 	ws2812_reset();
 	
 	for(i = 1; i < ws2812_usr.lednum; i++)
@@ -318,8 +276,6 @@ static ssize_t ws2812_drv_write(struct file *filp, const char __user * buf, size
 	printk("ws2812 write over!\n");
 #endif
 
-	init_flag = 1;
-
 	return 0;
 }
 
@@ -330,8 +286,6 @@ static int ws2812_drv_close(struct inode *node, struct file *file)
 
 	GPIO_LEVEL_REG = NULL;
 	GPIO_DIR_REG = NULL;
-
-	init_flag = 0;
 
 	return 0;
 }

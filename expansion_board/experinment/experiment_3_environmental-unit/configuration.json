@@ -1,0 +1,565 @@
+{  
+    "info" : {
+        "name" : "environment-unit"
+    },
+
+    "lubancat-zero": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "motor-driver-board": {  
+            "pwma_chip": 2,  
+            "pwmb_chip": 1,
+            "stby_pin_chip": "3",
+            "stby_pin_num": 5,
+            "ain1_pin_chip": "1",
+            "ain1_pin_num": 11,
+            "ain2_pin_chip": "1",
+            "ain2_pin_num": 10,
+            "bin1_pin_chip": "3",
+            "bin1_pin_num": 6,
+            "bin2_pin_chip": "3",
+            "bin2_pin_num": 7
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "motor-driver-board": {  
+            "pwma_chip": 2,  
+            "pwmb_chip": 3,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "3",
+            "ain2_pin_num": 8,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-1n": {  
+        
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 1,  
+            "pwmb_chip": 2,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "3",
+            "ain2_pin_num": 8,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-2": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "0",
+            "ain2_pin_num": 18,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-2-v1": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "0",
+            "ain2_pin_num": 22,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-2-v2": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "0",
+            "ain2_pin_num": 22,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-2-v3": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "0",
+            "ain2_pin_num": 22,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-2n": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "2",
+            "ain2_pin_num": 30,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-2n-v2": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 2,  
+            "pwmb_chip": 3,
+            "stby_pin_chip": "1",
+            "stby_pin_num": 8,
+            "ain1_pin_chip": "4",
+            "ain1_pin_num": 20,
+            "ain2_pin_chip": "2",
+            "ain2_pin_num": 30,
+            "bin1_pin_chip": "1",
+            "bin1_pin_num": 9,
+            "bin2_pin_chip": "1",
+            "bin2_pin_num": 10
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-4": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 4,  
+            "pwmb_chip": 3,
+            "stby_pin_chip": "4",
+            "stby_pin_num": 0,
+            "ain1_pin_chip": "1",
+            "ain1_pin_num": 13,
+            "ain2_pin_chip": "3",
+            "ain2_pin_num": 28,
+            "bin1_pin_chip": "4",
+            "bin1_pin_num": 1,
+            "bin2_pin_chip": "4",
+            "bin2_pin_num": 2
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-4-v1": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 4,  
+            "pwmb_chip": 3,
+            "stby_pin_chip": "4",
+            "stby_pin_num": 0,
+            "ain1_pin_chip": "1",
+            "ain1_pin_num": 13,
+            "ain2_pin_chip": "3",
+            "ain2_pin_num": 28,
+            "bin1_pin_chip": "3",
+            "bin1_pin_num": 20,
+            "bin2_pin_chip": "3",
+            "bin2_pin_num": 21
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-5": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "8",
+            "stby_pin_num": 4,
+            "ain1_pin_chip": "8",
+            "ain1_pin_num": 5,
+            "ain2_pin_chip": "7",
+            "ain2_pin_num": 7,
+            "bin1_pin_chip": "8",
+            "bin1_pin_num": 3,
+            "bin2_pin_chip": "8",
+            "bin2_pin_num": 2
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    },
+
+    "lubancat-5-v2": {
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },  
+
+        "motor-driver-board": {  
+            "pwma_chip": 3,  
+            "pwmb_chip": 4,
+            "stby_pin_chip": "7",
+            "stby_pin_num": 4,
+            "ain1_pin_chip": "7",
+            "ain1_pin_num": 5,
+            "ain2_pin_chip": "6",
+            "ain2_pin_num": 7,
+            "bin1_pin_chip": "7",
+            "bin1_pin_num": 3,
+            "bin2_pin_chip": "7",
+            "bin2_pin_num": 2
+        },
+
+        "ir": {
+            "ir_pin_chip": "6",
+            "ir_pin_num": 8
+        },
+
+        "sg90": {
+            "pwm_chip": 4
+        }
+
+    }
+
+}

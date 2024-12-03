@@ -1,0 +1,773 @@
+{  
+    "info" : {
+        "name" : "message-system"
+    },
+
+    "lubancat-zero": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event4"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event3",
+            "a-event": "/dev/input/event2",
+            "b-event": "/dev/input/event6"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "1",
+            "trig_pin_num": 7,
+            "echo_pin_chip": "1",
+            "echo_pin_num": 8
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event9"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event8",
+            "a-event": "/dev/input/event7",
+            "b-event": "/dev/input/event6"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "3",
+            "trig_pin_num": 17,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-1n": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }, 
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event5",
+            "a-event": "/dev/input/event9",
+            "b-event": "/dev/input/event8"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "3",
+            "trig_pin_num": 17,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-2": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "4",
+            "trig_pin_num": 26,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-2-v1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },   
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "4",
+            "trig_pin_num": 26,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-2-v2": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "4",
+            "trig_pin_num": 26,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-2-v3": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "4",
+            "trig_pin_num": 26,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-2n": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "4",
+            "trig_pin_num": 26,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-2n-v1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event7"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event6",
+            "a-event": "/dev/input/event5",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "4",
+            "trig_pin_num": 26,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 14
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-4": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 6,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 6,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event10"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event9",
+            "a-event": "/dev/input/event8",
+            "b-event": "/dev/input/event7"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "3",
+            "trig_pin_num": 6,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 15
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-4-v1": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 6,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 6,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event10"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event9",
+            "a-event": "/dev/input/event8",
+            "b-event": "/dev/input/event7"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "3",
+            "trig_pin_num": 6,
+            "echo_pin_chip": "3",
+            "echo_pin_num": 15
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-5": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 4,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 4,  
+            "address": ""
+        },   
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event12"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event11",
+            "a-event": "/dev/input/event10",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "2",
+            "trig_pin_num": 19,
+            "echo_pin_chip": "8",
+            "echo_pin_num": 0
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    },
+
+    "lubancat-5-v2": {  
+
+        "oled": {  
+            "interface": "i2c",  
+            "bus": 3,  
+            "address": ""
+        },  
+
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 4,  
+            "address": ""
+        },
+
+        "max30102": {  
+            "interface": "i2c",  
+            "bus": 4,  
+            "address": ""
+        },  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event12"
+        },
+
+        "ec11": {
+            "interface": "gpio", 
+            "sw-event": "/dev/input/event11",
+            "a-event": "/dev/input/event10",
+            "b-event": "/dev/input/event9"
+        },
+        
+        "hcsr04": {
+            "trig_pin_chip": "2",
+            "trig_pin_num": 19,
+            "echo_pin_chip": "8",
+            "echo_pin_num": 0
+        },
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "ldr_pin_chip": "6",
+            "ldr_pin_num": 8
+        },
+
+        "ntc": {
+            "ntc_pin_chip": "6",
+            "ntc_pin_num": 9
+        },
+
+        "buzzer": {
+            "pin_chip": "6",
+            "pin_num": 6
+        }
+    }
+
+}

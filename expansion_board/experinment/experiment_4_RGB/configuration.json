@@ -1,0 +1,279 @@
+{  
+    "info" : {
+        "name" : "RGB"
+    },
+
+    "lubancat-zero": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-1": {  
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-1n": {  
+        
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-2": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-2-v1": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-2-v2": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-2-v3": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-2n": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-2n-v2": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-4": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-4-v1": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-5": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "8",   
+            "cs_pin": 11    
+        }
+
+    },
+
+    "lubancat-5-v2": {
+
+        "key": {
+            "interface": "gpio", 
+            "event": "/dev/input/event6"
+        },
+
+        "ws2812": {
+            "interface": "",
+            "devname": "/dev/ws2812"
+        },
+
+        "w25qxx": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "8",   
+            "cs_pin": 11    
+        }
+
+    }
+
+}

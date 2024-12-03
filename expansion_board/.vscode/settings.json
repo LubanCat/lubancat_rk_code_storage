@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "mpu6050.h": "c",
+        "menu.h": "c",
+        "pwm.h": "c",
+        "flash.h": "c",
+        "motor.h": "c"
+    }
+}
