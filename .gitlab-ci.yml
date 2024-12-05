@@ -30,7 +30,8 @@ code-pack:
     #
     #NAS_URL1
     # 获取要延时删除的zip包列表
-    - find "$NAS_URL1" -path "$NAS_URL1/$TAR_NAME$now.$FORMAT" -prune -o -type f -name "*.$FORMAT" -print > /root/autodelate/temp/$ZIP_NAME$now.log
+    # - find "$NAS_URL1" -path "$NAS_URL1/$TAR_NAME$now.$FORMAT" -prune -o -type f -name "*.$FORMAT" -print > /root/autodelate/temp/$ZIP_NAME$now.log
+    - rm -rf $NAS_URL1/$TAR_NAME*.$FORMAT
     # 复制新的压缩包
     - cp -f $TAR_NAME$now.$FORMAT "$NAS_URL1"
     #NAS_URL2
