@@ -20,6 +20,7 @@
 #include "config.h"
 #include "key.h"
 #include "w25qxx.h"
+#include "spi.h"
 
 // 配置灯光和颜色相关的常量
 #define COLOR_TABLE_SIZE                20                          // 支持的颜色总数
@@ -43,10 +44,12 @@ pthread_t ws2812_obj;                   // ws2812线程对象
 int ws2812_thread_stop = 0;             // ws2812线程停止标志
 struct ws2812_mes ws2812;               // ws2812灯光控制信息
 
+spi_operations_t *spi_ops;                                          // spi操作函数
+
 unsigned char indices[CURRENT_COLORS_SIZE+1] = {0, 3, 2, 1, 0};     // 当前灯光颜色索引及写入标志。最后一个值存放flash写入标记，1已写入，0未写入
 pthread_mutex_t current_colors_mutex = PTHREAD_MUTEX_INITIALIZER;   // 颜色更新互斥锁
-unsigned char current_colors[CURRENT_COLORS_SIZE][3] = {0};         // 当前灯光颜色数组
-unsigned char color_table[][3] = {
+unsigned char current_colors[CURRENT_COLORS_SIZE][3] = {0};         // 存放当前所使用的灯光颜色
+unsigned char color_table[][3] = {                                  // 存放所有的颜色格式，随机颜色也是只从这里面随机
     {255, 0, 0},    // 红
     {0, 255, 0},    // 绿
     {0, 0, 255},    // 蓝
@@ -296,17 +299,31 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    /* w25qxx初始化 */
-    char w25qxxspi[20], w25qxxcschip[20];
+    /* spi初始化 */
+    char w25qxxspi[20];
     cJSON *w25qxx_spi = config_get_value("w25qxx", "bus");
-    cJSON *cs_chip = config_get_value("w25qxx", "cs_chip");
-    cJSON *cs_pin = config_get_value("w25qxx", "cs_pin");
-    if(w25qxx_spi == NULL || cs_chip == NULL || cs_pin == NULL)
+    if(w25qxx_spi == NULL)
         return -1;
 
     sprintf(w25qxxspi, "/dev/spidev%d.0", w25qxx_spi->valueint);
+    ret = spi_init(w25qxxspi);
+    if(ret < 0)
+	{
+		printf("spi init error!\n");
+		return -1;
+	}
+    spi_ops = get_spi_ops();
+    w25qxx_register_spi_operations(spi_ops);
+
+    /* w25qxx初始化 */
+    char w25qxxcschip[20];
+    cJSON *cs_chip = config_get_value("w25qxx", "cs_chip");
+    cJSON *cs_pin = config_get_value("w25qxx", "cs_pin");
+    if(cs_chip == NULL || cs_pin == NULL)
+        return -1;
+
     sprintf(w25qxxcschip, "/dev/gpiochip%s", cs_chip->valuestring);
-    ret = w25qxx_init(w25qxxspi, w25qxxcschip, cs_pin->valueint);
+    ret = w25qxx_init(w25qxxcschip, cs_pin->valueint);
 	if(ret < 0)
 	{
 		printf("w25qxx init error!\n");

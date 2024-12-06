@@ -5,7 +5,7 @@ CC = $(CROSS_COMPILE)gcc
 CFLAGS = -Wall -I./include  
   
 # 指定源文件目录  
-SRC_DIRS = config driver . menu  
+SRC_DIRS = bsp .  
   
 # 获取所有的 .c 文件  
 SRCS = $(foreach dir, $(SRC_DIRS), $(wildcard $(dir)/*.c))  

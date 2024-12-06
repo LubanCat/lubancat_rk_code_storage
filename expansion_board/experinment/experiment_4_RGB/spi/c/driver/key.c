@@ -15,31 +15,16 @@ volatile static int key_buffer[KEY_BUFFER_SIZE];
 volatile static int head = 0;
 volatile static int tail = 0;
 
-/*****************************
- * @brief : 检查缓冲区是否已满
- * @param : 无
- * @return: 1已满，0未满
-*****************************/
 static int is_buffer_full()
 {
     return (head + 1) % KEY_BUFFER_SIZE == tail;
 }
 
-/*****************************
- * @brief : 检查缓冲区是否为空
- * @param : 无
- * @return: 1已空，0未空
-*****************************/
 static int is_buffer_empty() 
 {
     return head == tail;
 }
 
-/*****************************
- * @brief : 向缓冲区添加按键值
- * @param : key - 要添加到缓冲区的按键值
- * @return: 无
-*****************************/
 static void push_key(int key)
 {
     if(!is_buffer_full())
@@ -49,11 +34,6 @@ static void push_key(int key)
     }
 }
 
-/*****************************
- * @brief : 从缓冲区中获取按键值
- * @param : 无
- * @return: 若缓冲区不为空，返回获取到的按键值；否则返回KEY_NORMAL
-*****************************/
 static int pop_key() 
 {
     if(!is_buffer_empty()) 

@@ -13,6 +13,8 @@
 #include <stdint.h>
 #include <linux/spi/spidev.h>
 
+#include "spi.h"
+
 // 设备ID
 #define W25QXX_80_ID						0xEF13
 #define W25QXX_16_ID						0xEF14
@@ -73,26 +75,11 @@
 #define W25QXX_INDIVIDUAL_BLOCK_LOCK       	0x36    // 单个块锁定
 #define W25QXX_INDIVIDUAL_BLOCK_UNLOCK     	0x39    // 单个块解锁
 
-typedef enum
-{
-	SPIMODE0 = SPI_MODE_0,
-	SPIMODE1 = SPI_MODE_1,
-	SPIMODE2 = SPI_MODE_2,
-	SPIMODE3 = SPI_MODE_3,
-}SPI_MODE;
- 
-typedef enum
-{
-    S_1M    = 1000000,
-	S_6_75M = 6750000,
-	S_13_5M = 13500000,
-	S_27M   = 27000000,
-}SPI_SPEED;
-
 void w25qxx_sector_erase(unsigned int addr);
 void w25qxx_page_write(unsigned int addr, unsigned char *buff, int len);
 void w25qxx_npage_write(unsigned int addr, unsigned char *write_buff, int len);
 void w25qxx_read_byte_data(unsigned int addr, unsigned char *buff, int len);
-int w25qxx_init(const char *spi_dev, const char *cs_chip, unsigned int cs_pin);
+int w25qxx_init(const char *cs_chip, unsigned int cs_pin);
+void w25qxx_register_spi_operations(spi_operations_t *ops);
 
 #endif
