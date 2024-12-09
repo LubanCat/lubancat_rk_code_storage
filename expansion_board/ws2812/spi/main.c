@@ -19,6 +19,8 @@
 
 #include "spi.h"
 
+#define SPI_BUS         "/dev/spidev3.0"
+
 unsigned char send_buf[24];
 void update_sendbuff(unsigned char r, unsigned char g, unsigned char b)
 {
@@ -53,7 +55,7 @@ int main(int argc, char **argv)
     spi_operations_t *spi_ops;      // spi操作函数
 
     // 初始化spi
-    ret = spi_init("/dev/spidev3.0");
+    ret = spi_init(SPI_BUS);
     if(ret < 0)
         return -1;
     spi_ops = get_spi_ops();
