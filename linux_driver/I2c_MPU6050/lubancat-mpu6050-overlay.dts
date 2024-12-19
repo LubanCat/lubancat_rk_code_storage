@@ -1,0 +1,27 @@
+/*
+* Copyright (C) 2022 - All Rights Reserved by
+* EmbedFire LubanCat
+*/
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include <dt-bindings/clock/rk3568-cru.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&i2c3 {
+    status = "okay";
+pinctrl-names = "default";
+pinctrl-0 = <&i2c3m0_xfer>;     //使用GPIO0_A1和GPIO0_A0复用为I2C3引脚
+    #address-cells = <1>;
+    #size-cells = <0>;
+    
+    mpu6050@68 {
+        compatible = "fire,i2c_mpu6050";
+        //compatible = "invensense,mpu6050"
+        reg = <0x68>;
+        status = "okay";  
+    };
+};
