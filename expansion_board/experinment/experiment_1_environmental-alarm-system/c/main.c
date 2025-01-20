@@ -66,7 +66,7 @@ int sensor_modules_init()
     ldr_gpiochip = gpiod_chip_open(ldr_pin_chip);  
     ntc_gpiochip = gpiod_chip_open(ntc_pin_chip);
     flame_gpiochip = gpiod_chip_open(flame_pin_chip);
-    if(flame_pin_chip == NULL || ntc_gpiochip == NULL || flame_gpiochip == NULL)
+    if(ldr_gpiochip == NULL || ntc_gpiochip == NULL || flame_gpiochip == NULL)
     {
         fprintf(stderr, "gpiod_chip_open error!\n");
         return -1;
