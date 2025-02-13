@@ -1,0 +1,393 @@
+{  
+    "info" : {
+        "name" : "environment-unit"
+    },
+
+    "lubancat-zero": {  
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-1": {  
+        
+        "mpu6050": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        },
+
+        "atgm332d": {  
+            "interface": "uart",  
+            "tty-dev": "/dev/ttyS3"    
+        }
+
+    },
+
+    "lubancat-1n": {  
+        
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-2": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-2-v1": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-2-v2": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-2-v3": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-2n": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-2n-v2": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 3,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 5,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-4": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 6,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-4-v1": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "6",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "6",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "6",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 6,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-5": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "8",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "8",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "8",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 4,  
+            "address": ""
+        }
+
+    },
+
+    "lubancat-5-v2": {
+
+        "dht11": {
+            "devname": "/dev/dht11"
+        },
+
+        "ldr": {
+            "pin_chip": "8",
+            "pin_num": 8
+        },
+
+        "ntc": {
+            "pin_chip": "8",
+            "pin_num": 9
+        },
+
+        "bmp280": {  
+            "interface": "spi",  
+            "bus": 0,  
+            "cs_chip": "8",   
+            "cs_pin": 11    
+        },
+
+        "ads1115": {  
+            "interface": "i2c",  
+            "bus": 4,  
+            "address": ""
+        }
+
+    }
+
+}
