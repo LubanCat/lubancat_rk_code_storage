@@ -57,7 +57,7 @@ motor_BIN2 = GPIO(gpionum_motor_BIN2, gpiochip_motor_BIN2, 1)   # 初始化电�
 
 motor_PWMA.frequency = 1e3          # 频率 1kHz
 motor_PWMA.duty_cycle = 0.4         # 占空比（%），范围：0.0-1.0
-motor_PWMA.polarity = "normal"      # 极性
+motor_PWMA.polarity = "normal"      # "normal"：正常极性，"inversed"：反向极性
 motor_PWMA.enable()                 # 使能
 
 motor_PWMB.frequency = 1e3
