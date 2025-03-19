@@ -17,7 +17,7 @@ OBJS = $(SRCS:.c=.o)
 TARGET = main  
   
 # 链接库  
-LDLIBS = -lgpiod -lpthread -lmqttclient -lm
+LDLIBS = -lgpiod -lpthread -lmqttclient -lm -lssl -lcrypto
   
 # 默认目标  
 all: $(TARGET)  

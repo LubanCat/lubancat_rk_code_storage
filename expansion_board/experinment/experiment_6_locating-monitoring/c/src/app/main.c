@@ -15,6 +15,9 @@
 #include <pthread.h>
 #include <gpiod.h>
 #include <math.h>
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
+#include <openssl/sha.h>
 
 #include "mqttclient.h"
 #include "ringbuff.h"
@@ -25,29 +28,24 @@
 #include "http.h"
 #include "gaodemap.h"
 
-// 阿里云 MQTT 服务器的主机地址
-#define ALIYUN_HOST                     ".iot-as-mqtt.cn-shanghai.aliyuncs.com"
-// 阿里云的产品密钥
-#define ALIYUN_PRODUCT_KEY			    "a19UBnDR9bp"
-// 设备名称
-#define ALIYUN_DEVICE_NAME			    "lubancat"
-// 设备密钥
-#define ALIYUN_DEVICE_SECRET            "48a3b8f5c88e6681166e7b717713ce87"
+// 设备信息
+#define TUYA_DEVICE_ID			        "2669d2b95856963bb4alms"
+#define TUYA_DEVICE_SECRET              "FNjwnHf7sGQCJzhc"
+
+// MQTT服务器信息
+#define TUYA_HOST                       "m1.tuyacn.com"
+#define TUYA_PORT                       "8883"
+#define TUYA_CLIENT_ID                  "tuyalink_"TUYA_DEVICE_ID
 
 // 用于发布数据的 MQTT 主题
-#define ALIYUN_TOPIC_PUBLISH            "/sys/"ALIYUN_PRODUCT_KEY"/"ALIYUN_DEVICE_NAME"/thing/event/property/post"
-// 用于订阅数据的 MQTT 主题
-#define ALIYUN_TOPIC_SUBSCRIB           "/sys/"ALIYUN_PRODUCT_KEY"/"ALIYUN_DEVICE_NAME"/thing/event/property/post_reply"
+#define TUYA_TOPIC_PUBLISH              "tylink/"TUYA_DEVICE_ID"/thing/property/report"
 
 // 高德地图API KEY
 #define GAODE_API_KEY                   "cc834f3ef25cb1f3a87bc8f14f8a5873"
 
-// MQTT 客户端对象
-mqtt_client_t *client = NULL;
-// 存储 MQTT 消息的环形缓冲区
-ring_buffer_t *mqtt_rb;
-// 用于 MQTT 发布的线程对象
-pthread_t mqtt_publish_thread_obj;
+mqtt_client_t *client = NULL;                     // MQTT 客户端对象
+ring_buffer_t *mqtt_rb = NULL;                    // 环形缓冲区，用于存储 MQTT 消息
+pthread_t mqtt_publish_thread_obj;                // MQTT 发布线程对象
 
 pthread_t mpu6050_thread_obj;
 int mpu6050_thread_stop = 0;
@@ -60,8 +58,32 @@ typedef struct sensor_mes {
     char value[500];
 } sensor_mes_t;
 
-// 声明外部函数 aiotMqttSign，用于生成 MQTT 签名
-extern int aiotMqttSign(const char *productKey, const char *deviceName, const char *deviceSecret, char clientId[150], char username[65], char password[65]);
+// CA 证书，用于 TLS 连接（嵌入代码中）
+static const char *ca_crt = {
+    "-----BEGIN CERTIFICATE-----\n"
+    "MIIDxTCCAq2gAwIBAgIBADANBgkqhkiG9w0BAQsFADCBgzELMAkGA1UEBhMCVVMx\n"
+    "EDAOBgNVBAgTB0FyaXpvbmExEzARBgNVBAcTClNjb3R0c2RhbGUxGjAYBgNVBAoT\n"
+    "EUdvRGFkZHkuY29tLCBJbmMuMTEwLwYDVQQDEyhHbyBEYWRkeSBSb290IENlcnRp\n"
+    "ZmljYXRlIEF1dGhvcml0eSAtIEcyMB4XDTA5MDkwMTAwMDAwMFoXDTM3MTIzMTIz\n"
+    "NTk1OVowgYMxCzAJBgNVBAYTAlVTMRAwDgYDVQQIEwdBcml6b25hMRMwEQYDVQQH\n"
+    "EwpTY290dHNkYWxlMRowGAYDVQQKExFHb0RhZGR5LmNvbSwgSW5jLjExMC8GA1UE\n"
+    "AxMoR28gRGFkZHkgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkgLSBHMjCCASIw\n"
+    "DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAL9xYgjx+lk09xvJGKP3gElY6SKD\n"
+    "E6bFIEMBO4Tx5oVJnyfq9oQbTqC023CYxzIBsQU+B07u9PpPL1kwIuerGVZr4oAH\n"
+    "/PMWdYA5UXvl+TW2dE6pjYIT5LY/qQOD+qK+ihVqf94Lw7YZFAXK6sOoBJQ7Rnwy\n"
+    "DfMAZiLIjWltNowRGLfTshxgtDj6AozO091GB94KPutdfMh8+7ArU6SSYmlRJQVh\n"
+    "GkSBjCypQ5Yj36w6gZoOKcUcqeldHraenjAKOc7xiID7S13MMuyFYkMlNAJWJwGR\n"
+    "tDtwKj9useiciAF9n9T521NtYJ2/LOdYq7hfRvzOxBsDPAnrSTFcaUaz4EcCAwEA\n"
+    "AaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwHQYDVR0OBBYE\n"
+    "FDqahQcQZyi27/a9BUFuIMGU2g/eMA0GCSqGSIb3DQEBCwUAA4IBAQCZ21151fmX\n"
+    "WWcDYfF+OwYxdS2hII5PZYe096acvNjpL9DbWu7PdIxztDhC2gV7+AJ1uP2lsdeu\n"
+    "9tfeE8tTEH6KRtGX+rcuKxGrkLAngPnon1rpN5+r5N9ss4UXnT3ZJE95kTXWXwTr\n"
+    "gIOrmgIttRD02JDHBHNA7XIloKmf7J6raBKZV8aPEjoJpL1E/QYVN8Gb5DKj7Tjo\n"
+    "2GTzLH4U/ALqn83/B2gX2yKQOC16jdFU8WnjXzPKej17CuPKf1855eJ1usV2GDPO\n"
+    "LPAvTK33sefOT6jEm0pUBsV/fdUID+Ic/n4XuKxe9tQWskMJDE32p2u0mYRlynqI\n"
+    "4uJEvlz36hz1\n"
+    "-----END CERTIFICATE-----\n"
+  };
 
 /*****************************
  * @brief : 信号处理函数，用于清理资源并安全退出程序
@@ -79,12 +101,29 @@ void sigint_handler(int sig_num)
     exit(0);  
 }
 
+/***************************
+ * @brief : 生成 HMAC-SHA256 哈希值
+ * @param : key - HMAC 算法的密钥（字符串形式）
+ * @param : data - 需要进行哈希计算的数据（字符串形式）
+ * @param : output - 用于存储哈希结果的输出缓冲区（必须有足够的空间，长度至少为 64 字节）
+ * @return: 无返回值，结果存储在 output 参数中
+ ***************************/
+void generate_hmac_sha256(const char *key, const char *data, char *output) 
+{
+    unsigned char *digest;
+    digest = HMAC(EVP_sha256(), key, strlen(key), (unsigned char *)data, strlen(data), NULL, NULL);
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) 
+    {
+        sprintf(output + (i * 2), "%02x", digest[i]);
+    }
+}
+
 /*****************************
  * @brief : 创建符合阿里云 ALINK 协议的 JSON 消息
  * @param : sensor - 指向 sensor_mes_t 结构体的指针，该结构体包含传感器名称和测量值
  * @return: 指向 cJSON 对象的指针，该对象表示创建的 JSON 消息；创建失败返回 NULL
  *****************************/
-static cJSON *create_alink_json(sensor_mes_t *sensor) 
+static cJSON *create_tuya_json(sensor_mes_t *sensor) 
 {   
     if(sensor == NULL)
         return NULL;
@@ -141,21 +180,6 @@ static void sensor_mes_init(sensor_mes_t *sensor, const char *name, const char *
 }
 
 /*****************************
- * @brief : 处理接收到的 MQTT 主题消息
- * @param : client - 指向 MQTT 客户端的指针，此处被强制转换为 void* 类型
- * @param : msg - 指向 message_data_t 结构体的指针，包含 MQTT 消息信息
- * @return: none
- *****************************/
-static void topic_handle(void* client, message_data_t* msg)
-{
-    (void) client;
-    MQTT_LOG_I("-----------------------------------------------------------------------------------");
-    MQTT_LOG_I("topic: %s", msg->topic_name);
-    MQTT_LOG_I("message:%s", (char*)msg->message->payload);
-    MQTT_LOG_I("-----------------------------------------------------------------------------------\n");
-}
-
-/*****************************
  * @brief : MQTT 发布线程函数
  * @param : arg - 指向 MQTT 客户端的指针，作为线程函数的参数传递
  * @return: none
@@ -168,16 +192,13 @@ void *mqtt_publish_thread(void *arg)
     sensor_mes_t payload;
     mqtt_message_t msg;
 
-    cJSON *alink_json;
-    char *alink_json_str;
+    cJSON *tuya_json;
+    char *tuya_json_str;
 
     memset(&msg, 0, sizeof(msg));
     msg.qos = 0;
 
     sleep(2);
-
-    // 订阅 MQTT 主题
-    mqtt_list_subscribe_topic(client);
 
     while(1) 
     {
@@ -187,17 +208,17 @@ void *mqtt_publish_thread(void *arg)
             continue;
         
         // 根据传感器消息创建 JSON 消息
-        alink_json = create_alink_json(&payload);
-        alink_json_str = cJSON_Print(alink_json);
+        tuya_json = create_tuya_json(&payload);
+        tuya_json_str = cJSON_Print(tuya_json);
 
-        msg.payload = (void *)alink_json_str;
-        // printf("\nalink json : \n");
-        // printf("%s\n", alink_json_str);
+        msg.payload = (void *)tuya_json_str;
+        // printf("\ntuya json : \n");
+        // printf("%s\n", tuya_json_str);
 
         // 发布消息到指定的 MQTT 主题
-        mqtt_publish(client, ALIYUN_TOPIC_PUBLISH, &msg);
-        cJSON_Delete(alink_json);
-        alink_json = NULL;
+        mqtt_publish(client, TUYA_TOPIC_PUBLISH, &msg);
+        cJSON_Delete(tuya_json);
+        tuya_json = NULL;
 
         sleep(1);
     }
@@ -302,47 +323,46 @@ void *atgm332d_thread(void *arg)
 int mqtt_init()
 {
     int rc = 0;
-    char clientId[150] = {0};
-	char username[65] = {0};
-	char password[65] = {0};
+
+    // 获取当前时间戳
+    time_t t = time(NULL);
+    char timestamp[32];
+    snprintf(timestamp, sizeof(timestamp), "%ld", t);
+
+    // 构建 UserName
+    char username[256];
+    snprintf(username, sizeof(username), "%s|signMethod=hmacSha256,timestamp=%s,secureMode=1,accessType=1", TUYA_DEVICE_ID, timestamp);
+    // printf("UserName: %s\n", username);
+
+    // 构建待签名的数据
+    char data_for_signature[256];
+    snprintf(data_for_signature, sizeof(data_for_signature), "deviceId=%s,timestamp=%s,secureMode=1,accessType=1", TUYA_DEVICE_ID, timestamp);
+ 
+    // 生成 HMAC-SHA256 签名
+    char password[65]; 
+    generate_hmac_sha256(TUYA_DEVICE_SECRET, data_for_signature, password);
+    // printf("Password: %s\n", password);
 
     // 初始化 MQTT 客户端
     client = mqtt_lease();
     if(client == NULL)
         return -1;
 
-    // 生成 MQTT 密码
-    if ((rc = aiotMqttSign(ALIYUN_PRODUCT_KEY, ALIYUN_DEVICE_NAME, ALIYUN_DEVICE_SECRET, clientId, username, password) < 0)) 
-    {
-        printf("aiotMqttSign -%0x4x\n", -rc);
-        return -1;
-    }
-    // printf("clientid: %s\n", clientId);
-    // printf("username: %s\n", username);
-    // printf("password: %s\n", password);
-
-    // 设置 MQTT 消息的端口
-    mqtt_set_port(client, "1883");
-    // 设置 MQTT 消息的主机
-    mqtt_set_host(client, ALIYUN_PRODUCT_KEY".iot-as-mqtt.cn-shanghai.aliyuncs.com");
-    // 设置 MQTT 客户端 ID
-    mqtt_set_client_id(client, clientId);
-    // 设置 MQTT 用户名
-    mqtt_set_user_name(client, username);
-    // 设置 MQTT 密码
-    mqtt_set_password(client, password);
-    // 设置 MQTT 会话为清除模式
-    mqtt_set_clean_session(client, 1);
+    mqtt_set_port(client, TUYA_PORT);               // 设置 MQTT 消息的端口
+    mqtt_set_host(client, TUYA_HOST);               // 设置 MQTT 消息的主机
+    mqtt_set_ca(client, (char*)ca_crt);             // 设置 CA 证书
+    mqtt_set_user_name(client, username);           // 设置 MQTT 用户名
+    mqtt_set_password(client, password);            // 设置 MQTT 密码
+    mqtt_set_client_id(client, TUYA_CLIENT_ID);     // 设置 MQTT 客户端 ID
+    mqtt_set_clean_session(client, 1);              // 设置 MQTT 会话为清除模式  
 
     // 连接到 MQTT 服务器
     mqtt_connect(client);
 
-    // 订阅主题
-    mqtt_subscribe(client, ALIYUN_TOPIC_SUBSCRIB, QOS0, topic_handle);
-
     // 创建 MQTT 发布线程
     rc = pthread_create(&mqtt_publish_thread_obj, NULL, mqtt_publish_thread, client);
-    if(rc!= 0) {
+    if(rc!= 0) 
+    {
         MQTT_LOG_E("create mqtt publish thread fail");
         return -1;
     }

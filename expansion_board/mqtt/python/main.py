@@ -1,82 +1,50 @@
 import json
 import time
 import paho.mqtt.client as mqtt
-from MqttSign import AuthIfo
-from ringbuff import RingBuffer
+import hmac
+from hashlib import sha256
+import uuid
 import threading
+import signal
+from ringbuff import RingBuffer
 
-# set the device info, include product key, device name, and device secret
-productKey = "a1pwoLHW8Tl"
-deviceName = "lubancat"
-deviceSecret = "160cacffcba7b83f2eb896403688dac5"
-
-# set timestamp, clientid, subscribe topic and publish topic
-timeStamp = str((int(round(time.time() * 1000))))
-clientId = "lubancat"
-pubTopic = "/sys/" + productKey + "/" + deviceName + "/thing/event/property/post"
-subTopic = "/sys/" + productKey + "/" + deviceName + "/thing/event/property/post_reply"
-
-# set host, port
-host = productKey + ".iot-as-mqtt.cn-shanghai.aliyuncs.com"
-# instanceId = "***"
-# host = instanceId + ".mqtt.iothub.aliyuncs.com"
-port = 1883
-keepAlive = 300
-
-# calculate the login auth info, and set it into the connection options
-m = AuthIfo()
-m.calculate_sign_time(productKey, deviceName, deviceSecret, clientId, timeStamp)
-client = mqtt.Client(m.mqttClientId)
-client.username_pw_set(username=m.mqttUsername, password=m.mqttPassword)
-
+# 待上传的温度值和led开关值
 temp_value = 35
 led_value = 1
 
-def create_alink_json(name, value):
-    """
-    创建符合阿里云 ALINK 协议的 JSON 消息
+# 设备信息
+DeviceID = '2632d4478100fda674lxlu'         # 替换成自己的DeviceID
+DeviceSecret = 'qxZS1LhriSGzzqiE'           # 替换成自己的DeviceSecret
 
-    :param name: 传感器名称
-    :param value: 传感器的测量值
-    :return: 生成的 JSON 字符串，如果创建失败返回 None
-    """
-    # 检查输入参数是否有效
-    if not name or not value:
-        return None
+# MQTT服务器信息
+Address = 'm1.tuyacn.com'
+Port = 8883
+ClientID = 'tuyalink_' + DeviceID
 
-    # 构建 JSON 结构
-    alink_json = {
-        "id": "123",
-        "version": "1.0",
-        "sys": {
-            "ack": 0
-        },
-        "params": {
-            name: {
-                "value": value
-            }
-        },
-        "method": "thing.event.property.post"
-    }
+# 认证信息
+T = int(time.time())
+UserName = f'{DeviceID}|signMethod=hmacSha256,timestamp={T},secureMode=1,accessType=1'
+data_for_signature = f'deviceId={DeviceID},timestamp={T},secureMode=1,accessType=1'.encode('utf-8')
+appsecret = DeviceSecret.encode('utf-8')
+Password = hmac.new(appsecret, data_for_signature, digestmod=sha256).hexdigest()
 
-    try:
-        # 将字典转换为 JSON 字符串
-        result = json.dumps(alink_json)
-        return result
-    except Exception as e:
-        print(f"创建 JSON 时出错: {e}")
-        return None
+# 发布主题
+pubTopic = f'tylink/{DeviceID}/thing/property/report'
 
 def temprature_thread():
     """
     温度传感器线程函数，用于模拟温度传感器数据的生成和写入环形缓冲区
     """
+    current_time = int(time.time() * 1000)
     dht11_data = {
-        "id": "123",
-        "version": "1.0",
-        "sys": {"ack": 0},
-        "params": {"temperature": {"value": "34"}},
-        "method": "thing.event.property.post"
+        "msgId":str(uuid.uuid4()),
+        "time":current_time,
+        "data":{
+            "temperature":{
+                "value": temp_value,
+                "time": current_time  
+            }
+        }
     }
 
     while True:
@@ -94,12 +62,16 @@ def led_thread():
     """
     LED 传感器线程函数，用于模拟 LED 状态数据的生成和写入环形缓冲区
     """
+    current_time = int(time.time() * 1000)
     led_data = {
-        "id": "123",
-        "version": "1.0",
-        "sys": {"ack": 0},
-        "params": {"led": {"value": "0"}},
-        "method": "thing.event.property.post"
+        "msgId":str(uuid.uuid4()),
+        "time":current_time,
+        "data":{
+            "led":{
+                "value": led_value,
+                "time": current_time  
+            }
+        }
     }
 
     while True:
@@ -123,7 +95,7 @@ def on_connect(client, userdata, flags, rc):
     :param rc: 连接结果码
     """
     if rc == 0:
-        print("Connect aliyun IoT Cloud Sucess")
+        print("Connect Tuya IoT Cloud Sucess")
     else:
         print("Connect failed...  error code is:" + str(rc))
 
@@ -159,6 +131,7 @@ def publish_message():
         if data is not None:
             # print("[MQTT Send Thread] 从环形缓冲区读取数据:", data)
             client.publish(pubTopic, json.dumps(data))
+            # print("publish ok, data = ", json.dumps(data))
         else:
             print("[MQTT Send Thread] 环形缓冲区为空，无数据可读取")
         # 模拟 MQTT 发送间隔
@@ -168,27 +141,28 @@ def subscribe_topic():
     """
     订阅 MQTT 主题
     """
-    # subscribe to subTopic("/a1LhUsK****/python***/user/get") and request messages to be delivered
-    client.subscribe(subTopic)
-    print("subscribe topic: " + subTopic)
+    pass
 
 ring_buffer = RingBuffer(10)
 
-# Set the on_connect callback function for the MQTT client
-client.on_connect = on_connect
-# Set the on_message callback function for the MQTT client
-client.on_message = on_message
-client = connect_mqtt()
-# Start the MQTT client loop in a non-blocking manner
+# 创建MQTT客户端
+client = mqtt.Client(ClientID)
+client.username_pw_set(UserName, Password)
+client.tls_set()  				# 必须启用TLS
+client.on_connect = on_connect  # 设置连接回调函数（可选）
+
+# 连接到MQTT服务器
+client.connect(Address, Port, 60)
+
+# 等待连接建立
 client.loop_start()
-time.sleep(2)
+time.sleep(2)  
 
+# 启动temprature和led线程
 temprature_thread_obj = threading.Thread(target=temprature_thread)
-temprature_thread_obj.daemon = True
-temprature_thread_obj.start()
-
 led_thread_obj = threading.Thread(target=led_thread)
-led_thread_obj.daemon = True
+
+temprature_thread_obj.start()
 led_thread_obj.start()
 
 subscribe_topic()

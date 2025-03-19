@@ -21,7 +21,6 @@ SRC_DIRS = \
 	src/bsp/uart \
 	src/hal/mpu6050 \
 	src/hal/atgm332d \
-	src/utils/aiot \
 	src/utils/ringbuff \
 	src/utils/config \
 	src/utils/http \
@@ -37,7 +36,7 @@ OBJS = $(SRCS:.c=.o)
 TARGET = main  
   
 # 链接库  
-LDLIBS = -lgpiod -lpthread -lmqttclient -lm -lcurl -lxml2
+LDLIBS = -lgpiod -lpthread -lmqttclient -lm -lcurl -lxml2 -lssl -lcrypto
   
 # 默认目标  
 all: $(TARGET)  

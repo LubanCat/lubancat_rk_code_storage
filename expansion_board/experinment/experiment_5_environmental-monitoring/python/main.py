@@ -1,42 +1,40 @@
-import json
-import time
-import time
 import gpiod
 import board
 import busio
 import os
+import json
+import time
+import hmac
+import uuid
 import threading
-import paho.mqtt.client as mqtt
+import signal
 import adafruit_ads1x15.ads1115 as ADS
+import paho.mqtt.client as mqtt
+from hashlib import sha256
 from adafruit_ads1x15.analog_in import AnalogIn
+
 from config import ConfigManager 
 from bmp280 import Bmx280Spi, MODE_NORMAL
-from MqttSign import AuthIfo
 from ringbuff import RingBuffer
 
-# set the device info, include product key, device name, and device secret
-productKey = "a1pwoLHW8Tl"
-deviceName = "lubancat"
-deviceSecret = "160cacffcba7b83f2eb896403688dac5"
+# 设备信息
+DeviceID = '2632d4478100fda674lxlu'         # 替换成自己的DeviceID
+DeviceSecret = 'qxZS1LhriSGzzqiE'           # 替换成自己的DeviceSecret
 
-# set timestamp, clientid, subscribe topic and publish topic
-timeStamp = str((int(round(time.time() * 1000))))
-clientId = "lubancat"
-pubTopic = "/sys/" + productKey + "/" + deviceName + "/thing/event/property/post"
-subTopic = "/sys/" + productKey + "/" + deviceName + "/thing/event/property/post_reply"
+# MQTT服务器信息
+Address = 'm1.tuyacn.com'
+Port = 8883
+ClientID = 'tuyalink_' + DeviceID
 
-# set host, port
-host = productKey + ".iot-as-mqtt.cn-shanghai.aliyuncs.com"
-# instanceId = "***"
-# host = instanceId + ".mqtt.iothub.aliyuncs.com"
-port = 1883
-keepAlive = 300
+# 认证信息
+T = int(time.time())
+UserName = f'{DeviceID}|signMethod=hmacSha256,timestamp={T},secureMode=1,accessType=1'
+data_for_signature = f'deviceId={DeviceID},timestamp={T},secureMode=1,accessType=1'.encode('utf-8')
+appsecret = DeviceSecret.encode('utf-8')
+Password = hmac.new(appsecret, data_for_signature, digestmod=sha256).hexdigest()
 
-# calculate the login auth info, and set it into the connection options
-m = AuthIfo()
-m.calculate_sign_time(productKey, deviceName, deviceSecret, clientId, timeStamp)
-client = mqtt.Client(m.mqttClientId)
-client.username_pw_set(username=m.mqttUsername, password=m.mqttPassword)
+# 发布主题
+pubTopic = f'tylink/{DeviceID}/thing/property/report'
 
 class GPIO:
     global gpio, gpiochip
@@ -66,41 +64,6 @@ class GPIO:
     def release(self):
         self.gpio.release()
 
-def create_alink_json(name, value):
-    """
-    创建符合阿里云 ALINK 协议的 JSON 消息
-
-    :param name: 传感器名称
-    :param value: 传感器的测量值
-    :return: 生成的 JSON 字符串，如果创建失败返回 None
-    """
-    # 检查输入参数是否有效
-    if not name or not value:
-        return None
-
-    # 构建 JSON 结构
-    alink_json = {
-        "id": "123",
-        "version": "1.0",
-        "sys": {
-            "ack": 0
-        },
-        "params": {
-            name: {
-                "value": value
-            }
-        },
-        "method": "thing.event.property.post"
-    }
-
-    try:
-        # 将字典转换为 JSON 字符串
-        result = json.dumps(alink_json)
-        return result
-    except Exception as e:
-        print(f"创建 JSON 时出错: {e}")
-        return None
-
 def temprature_thread():
     """
     温度传感器线程函数，用于模拟温度传感器数据的生成和写入环形缓冲区
@@ -111,12 +74,20 @@ def temprature_thread():
         temp_str = "{:d}.{:d}".format(data[2], data[3])
         humi_str = "{:d}.{:d}".format(data[0], data[1])
 
+        current_time = int(time.time() * 1000)
         dht11_data = {
-            "id": "123",
-            "version": "1.0",
-            "sys": {"ack": 0},
-            "params": {"temperature": {"value": temp_str}, "Humidity": {"value": humi_str}},
-            "method": "thing.event.property.post"
+            "msgId":str(uuid.uuid4()),
+            "time":current_time,
+            "data":{
+                "temperature":{
+                    "value": temp_str,
+                    "time": current_time  
+                },
+                "Humidity":{
+                    "value": humi_str,
+                    "time": current_time  
+                },
+            }
         }
         
         result = ring_buffer.write(dht11_data)
@@ -136,12 +107,20 @@ def ldrntc_thread():
         value_ldr = LDR.get_value()
         value_ntc = NTC.get_value()
 
+        current_time = int(time.time() * 1000)
         ldrntc_data = {
-            "id": "123",
-            "version": "1.0",
-            "sys": {"ack": 0},
-            "params": {"ldr": {"value": str(value_ldr)}, "ntc": {"value": str(value_ntc)}},
-            "method": "thing.event.property.post"
+            "msgId":str(uuid.uuid4()),
+            "time":current_time,
+            "data":{
+                "ldr":{
+                    "value": value_ldr,
+                    "time": current_time  
+                },
+                "ntc":{
+                    "value": value_ntc,
+                    "time": current_time  
+                },
+            }
         }
         
         result = ring_buffer.write(ldrntc_data)
@@ -161,12 +140,16 @@ def bmp280_thread():
         pressure = bmx.update_readings().pressure
         pressure_str = str(round(pressure / 1000, 2))
 
+        current_time = int(time.time() * 1000)
         bmp280_data = {
-            "id": "123",
-            "version": "1.0",
-            "sys": {"ack": 0},
-            "params": {"Atmosphere": {"value": pressure_str}},
-            "method": "thing.event.property.post"
+            "msgId":str(uuid.uuid4()),
+            "time":current_time,
+            "data":{
+                "Atmosphere":{
+                    "value": pressure_str,
+                    "time": current_time  
+                }
+            }
         }
         
         result = ring_buffer.write(bmp280_data)
@@ -192,12 +175,16 @@ def mq135_thread():
         ppm = a * (ratio ** b)
         ppm_str = str(f"{ppm:.2f}")
 
+        current_time = int(time.time() * 1000)
         mq135_data = {
-            "id": "123",
-            "version": "1.0",
-            "sys": {"ack": 0},
-            "params": {"AQI": {"value": ppm_str}},
-            "method": "thing.event.property.post"
+            "msgId":str(uuid.uuid4()),
+            "time":current_time,
+            "data":{
+                "AQI":{
+                    "value": ppm_str,
+                    "time": current_time  
+                }
+            }
         }
         
         result = ring_buffer.write(mq135_data)
@@ -220,23 +207,9 @@ def on_connect(client, userdata, flags, rc):
     :param rc: 连接结果码
     """
     if rc == 0:
-        print("Connect aliyun IoT Cloud Sucess")
+        print("Connect tuya IoT Cloud Sucess")
     else:
         print("Connect failed...  error code is:" + str(rc))
-
-def on_message(client, userdata, msg):
-    """
-    MQTT 消息接收回调函数，处理接收到的消息
-
-    :param client: MQTT 客户端对象
-    :param userdata: 用户数据
-    :param msg: 接收到的消息对象，包含主题和负载
-    """
-    topic = msg.topic
-    payload = msg.payload.decode()
-    print("receive message ---------- topic is : " + topic)
-    print("receive message ---------- payload is : " + payload)
-    print("\n")
 
 def connect_mqtt():
     """
@@ -260,14 +233,6 @@ def publish_message():
             print("[MQTT Send Thread] 环形缓冲区为空，无数据可读取")
         # 模拟 MQTT 发送间隔
         threading.Event().wait(1)
-
-def subscribe_topic():
-    """
-    订阅 MQTT 主题
-    """
-    # subscribe to subTopic("/a1LhUsK****/python***/user/get") and request messages to be delivered
-    client.subscribe(subTopic)
-    print("subscribe topic: " + subTopic)
 
 # to load config file
 config_file = '../configuration.json' 
@@ -364,21 +329,24 @@ mq135_thread_obj.daemon = True
 
 ring_buffer = RingBuffer(10)
 
-# Set the on_connect callback function for the MQTT client
-client.on_connect = on_connect
-# Set the on_message callback function for the MQTT client
-client.on_message = on_message
-client = connect_mqtt()
-# Start the MQTT client loop in a non-blocking manner
+# 创建MQTT客户端
+client = mqtt.Client(ClientID)
+client.username_pw_set(UserName, Password)
+client.tls_set()  				# 必须启用TLS
+client.on_connect = on_connect  # 设置连接回调函数（可选）
+
+# 连接到MQTT服务器
+client.connect(Address, Port, 60)
+
+# 等待连接建立
 client.loop_start()
-time.sleep(2)
+time.sleep(2)  
 
 temprature_thread_obj.start()
 ldrntc_thread_obj.start()
 bmp280_thread_obj.start()
 mq135_thread_obj.start()
 
-subscribe_topic()
 publish_message()
 
 def main():
