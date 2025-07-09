@@ -16,6 +16,7 @@
 #include <linux/input.h>  
 #include <pthread.h>  
 #include <errno.h>  
+#include <signal.h>
 
 #include "oled.h"
 

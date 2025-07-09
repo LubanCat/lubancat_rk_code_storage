@@ -184,6 +184,7 @@ int main(int argc, char **argv)
 
     pwm_config(pwm1, "period", "20000000");             // 20ms
     pwm_config(pwm1, "duty_cycle", "500000");           // 0.5ms 0度
+    pwm_config(pwm1, "polarity", "normal");
     pwm_config(pwm1, "enable", "1");
 
     /* inti PWM2 */
@@ -198,6 +199,7 @@ int main(int argc, char **argv)
 
     pwm_config(pwm2, "period", "20000000");             // 20ms
     pwm_config(pwm2, "duty_cycle", "500000");           // 0.5ms 0度
+    pwm_config(pwm2, "polarity", "normal");
     pwm_config(pwm2, "enable", "1");
 
     while(1)
