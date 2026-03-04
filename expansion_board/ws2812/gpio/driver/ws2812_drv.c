@@ -210,7 +210,7 @@ static ssize_t ws2812_drv_write(struct file *filp, const char __user * buf, size
 	}
 
 	/* step : 0-15使用GPIO_SWPORT_DR_L_OFFSET，16-31使用GPIO_SWPORT_DR_H_OFFSET */
-	step = ws2812_usr.gpionum / 15;
+	step = ws2812_usr.gpionum / 16;
 	if(ws2812_usr.gpiochip == 0)
 	{
 		/* 1、GPIO复用 */
