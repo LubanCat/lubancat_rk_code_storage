@@ -112,11 +112,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-
-
-//通过宏选择要测试 默认处理 还是使用SIGNAL函数捕获的示例
-#define     DEFAULT_HANDLER     1
-#define     SIGNAL_HANDLER      0
+//通过宏选择要测试默认处理还是使用SIGNAL函数捕获的示例
+#define     DEFAULT_HANDLER     0
+#define     SIGNAL_HANDLER      1
 
 #if ((DEFAULT_HANDLER | SIGNAL_HANDLER) == 0)
 #error "must choose a function to compile!"

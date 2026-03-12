@@ -5,8 +5,8 @@
 
 
 //通过宏选择要测试wait示例还是waitpid示例
-#define     ALARM_DEFAULT   0
-#define     ALARM_COVER     1
+#define     ALARM_DEFAULT   1
+#define     ALARM_COVER     0
 
 #if ((ALARM_DEFAULT | ALARM_COVER) == 0)
 #error "must choose a function to compile!"

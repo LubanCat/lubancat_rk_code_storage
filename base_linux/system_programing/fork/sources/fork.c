@@ -33,7 +33,6 @@ int main(void)
     /*返回值为 0 代表子进程*/
     else if (result == 0) {
         printf("The returned value is %d, In child process!! My PID is %d\n\n", result, getpid());
-
     }
 
     /*返回值大于 0 代表父进程*/

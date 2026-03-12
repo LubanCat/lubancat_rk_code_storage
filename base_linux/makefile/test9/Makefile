@@ -1,6 +1,6 @@
 #定义变量
 #ARCH默认为x86，使用gcc编译器，
-#否则使用arm编译器
+#否则使用aarch64-gcc编译器
 ARCH ?= x86
 TARGET = hello_main
 
@@ -23,7 +23,7 @@ CFLAGS = $(patsubst %, -I%, $(INC_DIR))
 
 #根据输入的ARCH变量来选择编译器
 #ARCH=x86，使用gcc
-#ARCH=arm64，使用arm-gcc
+#ARCH=arm64，使用aarch64-gcc
 ifeq ($(ARCH),x86)
 CC = gcc
 else
@@ -43,10 +43,11 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
 
 #伪目标
 .PHONY: clean cleanall
+
 #按架构删除
 clean:
 	rm -rf $(BUILD_DIR)
 
 #全部删除
 cleanall:
-	rm -rf build_x86 build_arm
+	rm -rf build_*
