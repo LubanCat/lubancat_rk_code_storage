@@ -1,18 +1,8 @@
-
 #生成可执行文件的名称
 Target = sigaction_demo
-ARCH ?= x86
-#编译器CC
-#根据传入的参数ARCH，确定使用的编译器
-#默认使用gcc编译器
-#make ARCH=ARM64 时使用ARM-GCC编译器
-ifeq ($(ARCH), x86)
-	CC = gcc
-else
-	CC = aarch64-linux-gnu-gcc
-endif
+CC = gcc
 #存放中间文件的路径
-build_dir = build_$(ARCH)
+build_dir = build
 #存放源文件的文件夹
 src_dir =  sources
 #存放头文件的文件夹
@@ -52,14 +42,10 @@ $(build_dir)/%.o : $(src_dir)/%.c $(includes) | create_build
 #以下为伪目标，调用方式：make 伪目标
 #clean：用于Clean Project
 #check：用于检查某个变量的值
-.PHONY:clean cleanall check create_build
-#按架构删除
+.PHONY:clean check create_build
+#删除
 clean:
 	rm -rf $(build_dir)
-
-#全部删除
-cleanall:
-	rm -rf build_x86 build_arm
 
 #命令前带"@",表示不在终端上输出执行的命令
 #这个目标主要是用来调试Makefile时输出一些内容
@@ -70,9 +56,6 @@ check:
 	@echo $(sources)
 	@echo $(objects)
 
-
 #创建一个新目录create，用于存放过程文件
 create_build:
 	@mkdir -p $(build_dir)
-
-
