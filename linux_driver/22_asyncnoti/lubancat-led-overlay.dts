@@ -1,0 +1,80 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include <dt-bindings/interrupt-controller/irq.h>
+
+/ {
+    fragment@0 {
+        target-path = "/";
+
+        __overlay__ {
+            led_test: led_test{
+                compatible = "fire,led_test";
+                led-gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_HIGH>;
+                button-gpios= <&gpio1 RK_PB2 GPIO_ACTIVE_HIGH>;
+                interrupt-parent = <&gpio1>;
+                interrupts = <RK_PB2 IRQ_TYPE_EDGE_BOTH>;
+                pinctrl-names = "default";
+                pinctrl-0 = <&led_button_pin>;
+            };
+        };
+    };
+
+    fragment@1 {
+        target = <&pinctrl>;
+
+        __overlay__ {
+            led_button_test {
+                led_button_pin: led_button_pin {
+                    rockchip,pins = 
+                        <0 RK_PC7 RK_FUNC_GPIO &pcfg_pull_none>,
+                        <1 RK_PB2 RK_FUNC_GPIO &pcfg_pull_up>;
+                };
+            };
+        };
+    };
+
+    fragment@2 {
+        target = <&leds>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+};
+
+/*
+ * 为了方便实验整理得各板卡的系统心跳灯
+ * RK3528：
+ * LubanCat-Q1、LubanCat-Q1IO：(GPIO4_B5)
+ * RK3562：
+ * LubanCat-1HS：(GPIO3_A7)
+ * RK3566：
+ * LubanCat-0、LubanCat-1、LubanCat-1n：(GPIO0_C5)
+ * LubanCat-1H：(GPIO0_C7)
+ * LubanCat-1IO：(GPIO0_C0)
+ * RK3568：
+ * LubanCat-2、LubanCat-2-V1、LubanCat-2-V2、LubanCat-2H、LubanCat-2N、LubanCat-2N-V2、LubanCat-2N-V3：(GPIO0_C7)
+ * LubanCat-2-V3：(GPIO1_A4)
+ * LubanCat-2IO：(GPIO4_D2)
+ * RK3576：
+ * LubanCat-3、LubanCat-3-V2、LubanCat-3IO：(GPIO3_C5)
+ * RK3588S：
+ * LubanCat-4、LubanCat-4-V1：(GPIO4_B5)
+ * LubanCat-4IO：(GPIO1_C6)
+ * RK3588：
+ * LubanCat-5、LubanCat-5-V2：(GPIO0_D3)
+ * LubanCat-5IO：(GPIO1_C6)
+ *
+ * 如果修改其他引脚修改led-gpios和rockchip,pins即可，如LED使用GPIO4_B5，按键使用GPIO4_A0
+ * led-gpios = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
+ * button-gpios= <&gpio4 RK_PA0 GPIO_ACTIVE_HIGH>;
+ * interrupt-parent = <&gpio4>;
+ * interrupts = <RK_PA0 IRQ_TYPE_EDGE_BOTH>;
+ *
+ * rockchip,pins = 
+ *    <4 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>,
+ *    <4 RK_PA0 RK_FUNC_GPIO &pcfg_pull_up>;
+*/

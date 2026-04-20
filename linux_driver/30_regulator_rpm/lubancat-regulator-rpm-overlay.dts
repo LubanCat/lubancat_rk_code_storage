@@ -1,0 +1,69 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+/ {
+    fragment@0 {
+        target-path = "/";
+        
+        __overlay__ {
+            /* GPIO注册为regulator电源控制器 */
+            regulator_rpm_pwr: regulator-rpm-pwr {
+                compatible = "regulator-gpio";
+                regulator-name = "regulator_rpm_pwr";
+                regulator-min-microvolt = <100000>;
+                regulator-max-microvolt = <3300000>;
+                gpios = <&gpio0 RK_PC7 GPIO_ACTIVE_HIGH>;
+                gpios-states = <0x1>;
+                states = <100000 0x0
+                        3300000 0x1>;
+                regulator-boot-on;
+                status = "okay";
+            };
+
+            /* 驱动匹配节点 */
+            regulator_rpm: regulator-rpm {
+                compatible = "fire,regulator_rpm";
+                vcc-supply = <&regulator_rpm_pwr>;
+                status = "okay";
+            };
+        };
+    };
+
+    fragment@1 {
+        target = <&leds>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+};
+
+/*
+ * 为了方便实验整理得各板卡的系统心跳灯
+ * RK3528：
+ * LubanCat-Q1、LubanCat-Q1IO：(GPIO4_B5)
+ * RK3562：
+ * LubanCat-1HS：(GPIO3_A7)
+ * RK3566：
+ * LubanCat-0、LubanCat-1、LubanCat-1n：(GPIO0_C5)
+ * LubanCat-1H：(GPIO0_C7)
+ * LubanCat-1IO：(GPIO0_C0)
+ * RK3568：
+ * LubanCat-2、LubanCat-2-V1、LubanCat-2-V2、LubanCat-2H、LubanCat-2N、LubanCat-2N-V2、LubanCat-2N-V3：(GPIO0_C7)
+ * LubanCat-2-V3：(GPIO1_A4)
+ * LubanCat-2IO：(GPIO4_D2)
+ * RK3576：
+ * LubanCat-3、LubanCat-3-V2、LubanCat-3IO：(GPIO3_C5)
+ * RK3588S：
+ * LubanCat-4、LubanCat-4-V1：(GPIO4_B5)
+ * LubanCat-4IO：(GPIO1_C6)
+ * RK3588：
+ * LubanCat-5、LubanCat-5-V2：(GPIO0_D3)
+ * LubanCat-5IO：(GPIO1_C6)
+ *
+ * 如果修改其他引脚修改led-gpios和rockchip,pins即可，如GPIO4_B5
+ * gpios = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
+*/

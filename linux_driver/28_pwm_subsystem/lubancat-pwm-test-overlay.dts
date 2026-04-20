@@ -1,0 +1,29 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+/ {
+    fragment@0 {
+        target = <&pwm9>;
+
+        __overlay__ {
+            pinctrl-names = "active";
+            pinctrl-0 = <&pwm9m0_pins>;
+            status = "okay";
+        };
+    };
+
+    fragment@1 {
+        target-path = "/";
+
+        __overlay__ {
+            pwm_test: pwm-test {
+                status = "okay";
+                compatible = "fire,pwm_subsystem";
+                pwms = <&pwm9 0 10000 0>;
+            };
+        };
+    };
+};

@@ -1,0 +1,27 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+
+/ {
+    fragment@0 {
+        target = <&i2c3>;
+
+        __overlay__ {
+            clock-frequency = <100000>;
+            pinctrl-names = "default";
+            pinctrl-0 = <&i2c3m1_xfer>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            i2c_oled@3c {
+                compatible = "fire,i2c_oled";
+                reg = <0x3c>;
+                status = "okay";
+            };
+        };
+    };
+};

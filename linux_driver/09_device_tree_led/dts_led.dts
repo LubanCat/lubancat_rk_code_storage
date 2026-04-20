@@ -1,0 +1,83 @@
+/*
+ * 为了方便实验整理得RK各芯片各GPIO寄存器基地址
+ * RK3528：
+ *  GPIO0：0xff210000
+ *  GPIO1：0xff220000
+ *  GPIO2：0xff230000
+ *  GPIO3：0xff240000
+ * 
+ * RK3562：
+ *  GPIO0：0xff260000
+ *  GPIO1：0xff620000
+ *  GPIO2：0xff630000
+ *  GPIO3：0xffac0000
+ *  GPIO4：0xffad0000
+ * 
+ * RK3566/RK3568：
+ *  GPIO0：0xfdd60000
+ *  GPIO1：0xfe740000
+ *  GPIO2：0xfe750000
+ *  GPIO3：0xfe760000
+ *  GPIO4：0xfe770000
+ *
+ * RK3588S/RK3588：
+ *  GPIO0：0xfd8a0000
+ *  GPIO1：0xfec20000
+ *  GPIO2：0xfec30000
+ *  GPIO3：0xfec40000
+ *  GPIO4：0xfec50000
+ *
+ * 为了方便实验整理得各板卡的系统心跳灯
+ * RK3528：
+ * LubanCat-Q1、LubanCat-Q1IO：(GPIO4_B5)
+ * RK3562：
+ * LubanCat-1HS：(GPIO3_A7)
+ * RK3566：
+ * LubanCat-0、LubanCat-1、LubanCat-1n：(GPIO0_C5)
+ * LubanCat-1H：(GPIO0_C7)
+ * LubanCat-1IO：(GPIO0_C0)
+ * RK3568：
+ * LubanCat-2、LubanCat-2-V1、LubanCat-2-V2、LubanCat-2H、LubanCat-2N、LubanCat-2N-V2、LubanCat-2N-V3：(GPIO0_C7)
+ * LubanCat-2-V3：(GPIO1_A4)
+ * LubanCat-2IO：(GPIO4_D2)
+ * RK3576：
+ * LubanCat-3、LubanCat-3-V2、LubanCat-3IO：(GPIO3_C5)
+ * RK3588S：
+ * LubanCat-4、LubanCat-4-V1：(GPIO4_B5)
+ * LubanCat-4IO：(GPIO1_C6)
+ * RK3588：
+ * LubanCat-5、LubanCat-5-V2：(GPIO0_D3)
+ * LubanCat-5IO：(GPIO1_C6)
+ *
+ * 本实验默认以RK3568的GPIO0_C7为例，如果需要修改为其他引脚，需修改
+ * 1、GPIO寄存器基地址，RK3568的GPIO0基地址为0xFDD60000
+ *       led@0xfdd60000{
+ *           reg = <0xfdd60000 0x00000004>;
+ * 2、引脚偏移，A、B端口的引脚属于低16个引脚，C、D端口的引脚属于高16个引脚，GPIO0_C7中的C7是高16个引脚中索引号为7的引脚。
+ *       led-pin = <7>;
+ * 3、数据寄存器和数据方向寄存器映射
+ *    A、B端口使用GPIO_DR_L、GPIO_DDR_L 对应 high-low-position = <0>;
+ *    C、D端口使用GPIO_DR_H、GPIO_DDR_H 对应 high-low-position = <1>;
+ *    GPIO0_C7的端口为C，使用
+ *       high-low-position = <1>;
+ *
+ * 如果修改为RK3588S的GPIO4_B5
+ *        led@0xfec50000{               // GPIO4的基地址
+ *           reg = <0xfec50000 0x00000004>;
+ *           high-low-position = <0>;   // B端口使用GPIO_DR_L、GPIO_DDR_L，对应<0>;
+ *           led-pin = <13>;            // 偏移，GPIO4_B5，B端口属于低16个引脚，B5为8+5位，即偏移13
+ *       };
+*/
+
+    led_test: led_test{
+        compatible = "fire,led_test";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        led@0xfdd60000{
+            reg = <0xfdd60000 0x00000004>;
+            high-low-position = <1>;
+            led-pin = <7>;
+        };
+    };
+

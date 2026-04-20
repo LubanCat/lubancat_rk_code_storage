@@ -1,0 +1,12 @@
+    
+    get_dts_info_test: get_dts_info_test{
+        compatible = "get_dts_info_test";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        led@0xfdd60000{
+            compatible = "fire,led_test";
+            reg = <0xfdd60000 0x00000100>;
+            status = "okay";
+        };
+    };
