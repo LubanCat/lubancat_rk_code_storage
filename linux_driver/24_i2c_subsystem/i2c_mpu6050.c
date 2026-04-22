@@ -153,8 +153,8 @@ static int mpu6050_init(struct i2c_client *client)
 
     /* 配置电源管理寄存器：唤醒MPU6050，使用内部8Mhz时钟源 */
     ret = i2c_write_mpu6050(client, PWR_MGMT_1, 0x00);
-
     if (ret < 0) goto init_fail;
+    
     /* 配置采样率分频寄存器：陀螺仪采样率，1KHz */
     ret = i2c_write_mpu6050(client, SMPLRT_DIV, 0x07);
     if (ret < 0) goto init_fail;
