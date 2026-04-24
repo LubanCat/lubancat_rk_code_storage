@@ -1,0 +1,27 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+/ {
+    fragment@0 {
+        target = <&i2c3>;
+
+        __overlay__ {
+            clock-frequency = <400000>;
+            pinctrl-names = "default";
+            pinctrl-0 = <&i2c3m1_xfer>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            ads1115: ads1115@48 {
+                compatible = "fire,ads1115";
+                reg = <0x48>;
+                gain = <0>;       /* 增益：0 -> ±6.144V */
+                data-rate = <4>;  /* 采样率：4 -> 128SPS */
+            };
+        };
+    };
+};
