@@ -116,7 +116,7 @@ int oled_fill(int fd, u8 start_x, u8 start_y, u8 end_x, u8 end_y, u8 data)
     }
 
     /*填充要发送的数据*/
-    display_struct = malloc(sizeof(oled_display_struct) + end_x - start_x + 1);
+    display_struct = malloc(sizeof(oled_display_struct) + (size_t)(end_x - start_x + 1));
     if (display_struct == NULL)
     {
         printf("oled_fill malloc error \n");
@@ -159,7 +159,7 @@ int oled_show_one_letter(int fd, u8 x, u8 y, u8 width, u8 high, u8 *data)
     high = high/8;
 
     /*申请空间*/
-    display_struct = malloc(sizeof(oled_display_struct) + width * high);
+    display_struct = malloc(sizeof(oled_display_struct) + (size_t)width * high);
     if (display_struct == NULL)
     {
         printf("oled_fill malloc error \n");
