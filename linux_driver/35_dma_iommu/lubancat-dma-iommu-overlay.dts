@@ -1,0 +1,15 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    fragment@0 {
+        target-path = "/";
+        
+        __overlay__ {
+            dma_iommu_test: dma-iommu-test {
+                compatible = "fire,dma-iommu";
+                status = "okay";
+            };
+        };
+    };
+};
