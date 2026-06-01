@@ -1,0 +1,7 @@
+#需添加到内核源码/drivers/gpu/drm/rockchip/Kconfig
+
+config DRM_COLOR_BAR
+	bool "DRM color bar test"
+	select ROCKCHIP_DRM_DIRECT_SHOW
+	help
+	  This is a DRM test driver.
