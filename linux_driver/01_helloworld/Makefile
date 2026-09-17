@@ -24,7 +24,7 @@ obj-m := helloworld.o
 all:
 	$(MAKE) -C $(KERNEL_DIR) M=$(CURDIR) modules
 
-.PHONE:clean
+.PHONY: clean
 
 #清理编译生成的文件
 clean:
